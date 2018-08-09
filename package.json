@@ -1,0 +1,19 @@
+{
+  "name": "billard_nodejs_backend",
+  "version": "1.0.0",
+  "description": "The Backend for my React app to store the billard games from the pool table in our mancave..",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/schwiddi/billard_nodejs_backend.git"
+  },
+  "author": "schwiddi@me.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/schwiddi/billard_nodejs_backend/issues"
+  },
+  "homepage": "https://github.com/schwiddi/billard_nodejs_backend#readme"
+}
