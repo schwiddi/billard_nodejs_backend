@@ -3,5 +3,3 @@ function sayHello(name) {
 }
 
 sayHello('Dominik');
-
-console.log('Test')
