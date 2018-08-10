@@ -20,7 +20,7 @@ const port = 3001
 
 app.listen(1337, () => {
     //earlier usage
-    console.log('listener started on ' + port ' ...')
+    console.log('listener started on ' + port + '...')
     // now you can do this
-    console.log('listener started on 1337...')
+    console.log(`listener started on ${port}...`) // see the special thing `````
 });
