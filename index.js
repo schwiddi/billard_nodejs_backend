@@ -14,15 +14,10 @@ const app = express();
 
 // gebe mal die app aus, um zu schauen was ide alles für funktionen oder methoden hat wie auch immer..
 console.log('##############################################');
-console.log('##############################################');
-console.log('##############################################');
-console.log('##############################################');
-console.log('##############################################');
-console.log('##############################################');
 console.log(app);
 
 
 
-app.listen(3001, () => {
+app.listen(1337, () => {
     console.log('listener started on 3001...')
 });
