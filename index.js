@@ -20,5 +20,4 @@ console.log(app);
 
 app.listen(1337, () => {
     console.log('listener started on 1337...')
-    console.log('.....')
 });
