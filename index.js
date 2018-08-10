@@ -8,7 +8,7 @@ const express = require('express');
 // doku --> http://expressjs.com/de/4x/api.html
 
 // nun nutze diese funktionen als app, das ist so konvention offensichtlich
-//const app = express();
+const app = express();
 // hier führst du express() aus, die klammern sagen ausführen heissen irgendwie parasynthese
 // dann schreibst du den output in die const app
 
