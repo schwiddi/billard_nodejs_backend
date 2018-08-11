@@ -1,9 +1,13 @@
 /*jshint esversion: 6 */
 const express = require('express');
 const app = express();
+app.use(express.json());
+
+// Setting Port
 const fallbackport = '3001';
-// Getting PORT form env var
 const port = process.env.PORT || fallbackport;
+
+// temporar Database :)
 const games = [
     { id: 1, playerA: 'Schwiddi', playerB: 'Basil', scorePlayerA: 1, scorePlayerB: 0 },
     { id: 2, playerA: 'Schwiddi', playerB: 'Basil', scorePlayerA: 0, scorePlayerB: 1 },
@@ -32,9 +36,25 @@ app.get('/api/v1/games/:id', (req, res) => {
     // and cause of this is a string not an int
     // we need to parse it via global function parseInt
     const game = games.find(c => c.id === parseInt(req.params.id));
+    if (!game) res.status(404).send('Game id not found');
     res.send(game);
-    console.log(`someone looked for the game with the id ${game}`);
 });
+
+// create a new game
+// or POST a Game to the backend to say
+app.post('/api/v1/games', (req, res) => {
+    const game = {
+        id: games.length + 1,
+        playerA: req.body.playerA,
+        playerB: req.body.playerB,
+        scorePlayerA: req.body.scorePlayerA,
+        scorePlayerB: req.body.scorePlayerB,
+    };
+
+    games.push(game);
+    res.send(game);
+});
+
 
 
 
