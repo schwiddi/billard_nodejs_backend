@@ -4,6 +4,6 @@ const app = express();
 
 const port = 3001
 
-app.listen(1337, () => {
+app.listen(port, () => {
     console.log(`listener started on ${port}...`)
 });
