@@ -1,7 +1,12 @@
 /*jshint esversion: 6 */
+
+// express stuff
 const express = require('express');
 const app = express();
 app.use(express.json());
+
+// Input Validation with joi
+const Joi = require('joi');
 
 // Setting Port
 const fallbackport = '3001';
@@ -13,7 +18,7 @@ const games = [
     { id: 2, playerA: 'Schwiddi', playerB: 'Basil', scorePlayerA: 0, scorePlayerB: 1 },
     { id: 3, playerA: 'Mani', playerB: 'Basil', scorePlayerA: 0, scorePlayerB: 1 },
     { id: 4, playerA: 'Hazem', playerB: 'Schwiddi', scorePlayerA: 1, scorePlayerB: 0 }, 
-    { id: 5, playerA: 'Schwiddi', playerB: 'Hazem', scorePlayerA: 0, scorePlayerB: 1 },
+    { id: 5, playerA: 'Schwiddi', playerB: 'Hazem', scorePlayerA: 0, scorePlayerB: 1 }
 ];
 
 // define routes
@@ -43,12 +48,30 @@ app.get('/api/v1/games/:id', (req, res) => {
 // create a new game
 // or POST a Game to the backend to say
 app.post('/api/v1/games', (req, res) => {
+    const schemaforjoi = {
+        playerA: Joi.string().min(2).required(),
+        playerB: Joi.string().min(2).required(),
+        scorePlayerA: Joi.number().integer().min(0).max(1).required(),
+        scorePlayerB: Joi.number().integer().min(0).max(1).required()
+    };
+
+    const validateresult = Joi.validate(req.body, schemaforjoi);
+
+    if (validateresult.error) {
+        res.status(400).send(validateresult.error.details[0].message);
+        return;
+    }
+
+
+
+
+
     const game = {
         id: games.length + 1,
         playerA: req.body.playerA,
         playerB: req.body.playerB,
         scorePlayerA: req.body.scorePlayerA,
-        scorePlayerB: req.body.scorePlayerB,
+        scorePlayerB: req.body.scorePlayerB
     };
 
     games.push(game);
