@@ -22,3 +22,7 @@ yarn-error.log*
 
 # Mac OS X hidden files
 .DS_Store
+
+
+# Exclude db Credencials
+/db_modules/credentials*
