@@ -137,6 +137,9 @@ app.delete('/api/v1/games/:id', (req, res) => {
     console.log(`someone deleted game with id: ${game.id}`);
 });
 
+// here can go an endpoint to list all players
+// that have played on the table
+
 
 
 // starting server stuff
