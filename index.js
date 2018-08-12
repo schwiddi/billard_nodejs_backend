@@ -163,7 +163,10 @@ app.delete('/api/v1/games/:id', (req, res) => {
 
 // here can go an endpoint to list all players
 // that have played on the table
-
+app.get('/api/vi/players', (req, res) => {
+    res.send(getAllPlayers);
+    console.log('someone listed your games');
+});
 
 
 // starting server stuff
