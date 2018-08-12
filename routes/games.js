@@ -4,6 +4,7 @@
 // Import things
 const express = require('express');     // middleware
 const Joi = require('joi');             // validation
+const debuggamesapi = require('debug')('app:gamesapi');
 
 // ENV things
 
@@ -27,6 +28,7 @@ function validateGame(game) {
         scorePlayerA: Joi.number().integer().min(0).max(1).required(),
         scorePlayerB: Joi.number().integer().min(0).max(1).required(),
     };
+    debuggamesapi('Game Input Validate Function was called..')
     return Joi.validate(game, schema);
 }
 
@@ -35,7 +37,7 @@ function validateGame(game) {
 // GET
 router.get('/', (req, res) => { // because of the router u use / here but it is /api/v1..
     res.send(games);            // see index js setup for this route to here
-    console.log('someone listed your games');
+    debuggamesapi('someone listed your games');
 });
 
 // GET by id
@@ -46,19 +48,19 @@ router.get('/:id', (req, res) => {
     // we need to parse it via global function parseInt
     const game = games.find(c => c.id === parseInt(req.params.id));
     if (!game) {
-        console.log(`someone looked for a game id that does not exist`);
+        debuggamesapi(`someone looked for a game id that does not exist`);
         return res.status(404).send('Game id not found');
     }
     
     res.send(game);
-    console.log(`someone listed game id: ${game.id}`);
+    debuggamesapi(`someone listed game id: ${game.id}`);
 });
 
 // POST new game
 router.post('/', (req, res) => {
     const { error } = validateGame(req.body);
     if (error) {
-        console.log(`someone wanted to add a game but the validation was not ok`);
+        debuggamesapi(`someone wanted to add a game but the validation was not ok`);
         return res.status(400).send(error.details[0].message);
     }
 
@@ -72,7 +74,7 @@ router.post('/', (req, res) => {
 
     games.push(game);
     res.send(game);
-    console.log(`someone added a new game, the id is: ${game.id}`);
+    debuggamesapi(`someone added a new game, the id is: ${game.id}`);
 });
 
 // UPDATE a game by id
@@ -81,7 +83,7 @@ router.put('/:id', (req, res) => {
     const game = games.find(c => c.id === parseInt(req.params.id));
     // if not exists return 404
     if (!game) {
-        console.log(`someone wanted to updated a game that does not exist`);
+        debuggamesapi(`someone wanted to updated a game that does not exist`);
         return res.status(404).send('Game id not found');
     }
     
@@ -91,7 +93,7 @@ router.put('/:id', (req, res) => {
     const { error } = validateGame(req.body);
     // if invalid 400
     if (error) {
-        console.log(`someone wanted to updated a game but the validation was not ok`);
+        debuggamesapi(`someone wanted to updated a game but the validation was not ok`);
         return res.status(400).send(error.details[0].message);
     }
 
@@ -104,14 +106,14 @@ router.put('/:id', (req, res) => {
     // return the updated game
     res.send(game);
 
-    console.log(`someone updated game with id: ${game.id}`);
+    debuggamesapi(`someone updated game with id: ${game.id}`);
 });
 
 // DELETE a game by id
 router.delete('/:id', (req, res) => {
     const game = games.find(c => c.id === parseInt(req.params.id));
     if (!game) {
-        console.log(`someone wanted to deleted game that does not exist: ${game.id}`);
+        debuggamesapi(`someone wanted to deleted game that does not exist: ${game.id}`);
         return res.status(404).send('Game id not found');
     }
 
@@ -120,7 +122,7 @@ router.delete('/:id', (req, res) => {
 
     res.send(game);
 
-    console.log(`someone deleted game with id: ${game.id}`);
+    debuggamesapi(`someone deleted game with id: ${game.id}`);
 });
 
 
