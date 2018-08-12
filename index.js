@@ -22,6 +22,7 @@ const games = [
 ];
 
 
+
 // Validate Function
 function validateGame(game) {
     const schema = {
@@ -31,6 +32,29 @@ function validateGame(game) {
         scorePlayerB: Joi.number().integer().min(0).max(1).required(),
     };
     return Joi.validate(game, schema);
+}
+
+
+// allplayers function
+function getAllPlayers() {
+    let allplayers = [];
+
+    anzahlitemsingamesarray = games.length;
+    
+    for (i = 0; i < anzahlitemsingamesarray; i++) {
+        let result = allplayers.find(c => c === games[i].playerA);
+        if (!result) {  
+            allplayers.push(games[i].playerA);
+        }
+    }
+    
+    for (i = 0; i < anzahlitemsingamesarray; i++) {
+        let result = allplayers.find(c => c === games[i].playerB);
+        if (!result) {
+            allplayers.push(games[i].playerB);
+        }
+    }
+    return allplayers;
 }
 
 
