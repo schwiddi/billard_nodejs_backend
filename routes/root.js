@@ -3,7 +3,7 @@
 
 // Import things
 const express = require('express');     // middleware
-const debug = require('debug')('app:all');
+const debugrootroute = require('debug')('app:routeroot');
 
 // setting up express
 const router = express.Router();        // create object
@@ -14,7 +14,7 @@ const router = express.Router();        // create object
 // root route
 router.get('/', (req, res) => {
     res.send('<h1>Hello World..</h1><p><a href="api/v1/games">use api/v1/games ...</a></p>');
-    debug('someone landed on the root route..');
+    debugrootroute('someone landed on the root route..');
 });
 
 // Export the Router
