@@ -57,8 +57,8 @@ app.get('/api/v1/games/:id', (req, res) => {
     // we need to parse it via global function parseInt
     const game = games.find(c => c.id === parseInt(req.params.id));
     if (!game) {
-        res.status(404).send('Game id not found');
-        return;
+        console.log(`someone looked for a game id that does not exist`);
+        return res.status(404).send('Game id not found');
     }
     
     res.send(game);
@@ -70,8 +70,8 @@ app.get('/api/v1/games/:id', (req, res) => {
 app.post('/api/v1/games', (req, res) => {
     const { error } = validateGame(req.body);
     if (error) {
-        res.status(400).send(error.details[0].message);
-        return;
+        console.log(`someone wanted to add a game but the validation was not ok`);
+        return res.status(400).send(error.details[0].message);
     }
 
     const game = {
@@ -95,8 +95,8 @@ app.put('/api/v1/games/:id', (req, res) => {
     const game = games.find(c => c.id === parseInt(req.params.id));
     // if not exists return 404
     if (!game) {
-        res.status(404).send('Game id not found');
-        return;
+        console.log(`someone wanted to updated a game that does not exist`);
+        return res.status(404).send('Game id not found');
     }
     
     // othervise validate
@@ -105,8 +105,8 @@ app.put('/api/v1/games/:id', (req, res) => {
     const { error } = validateGame(req.body);
     // if invalid 400
     if (error) {
-        res.status(400).send(error.details[0].message);
-        return;
+        console.log(`someone wanted to updated a game but the validation was not ok`);
+        return res.status(400).send(error.details[0].message);
     }
 
     // update the game
@@ -125,8 +125,8 @@ app.put('/api/v1/games/:id', (req, res) => {
 app.delete('/api/v1/games/:id', (req, res) => {
     const game = games.find(c => c.id === parseInt(req.params.id));
     if (!game) {
-        res.status(404).send('Game id not found');
-        return;
+        console.log(`someone wanted to deleted game that does not exist: ${game.id}`);
+        return res.status(404).send('Game id not found');
     }
 
     const index = games.indexOf(game);
