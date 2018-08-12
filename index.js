@@ -38,19 +38,14 @@ function validateGame(game) {
 // allplayers function
 function getAllPlayers() {
     let allplayers = [];
-
     anzahlitemsingamesarray = games.length;
-    
     for (i = 0; i < anzahlitemsingamesarray; i++) {
-        let result = allplayers.find(c => c === games[i].playerA);
-        if (!result) {  
+        let resultplayera = allplayers.find(c => c === games[i].playerA);
+        if (!resultplayera) {  
             allplayers.push(games[i].playerA);
         }
-    }
-    
-    for (i = 0; i < anzahlitemsingamesarray; i++) {
-        let result = allplayers.find(c => c === games[i].playerB);
-        if (!result) {
+        let resultplayerb = allplayers.find(c => c === games[i].playerB);
+        if (!resultplayerb) {
             allplayers.push(games[i].playerB);
         }
     }
