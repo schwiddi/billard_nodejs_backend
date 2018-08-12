@@ -3,7 +3,7 @@
 
 // Import things
 const express = require('express');             // middleware
-const games = require('./routes/games');        // my route to games handler    
+const gamesrouter = require('./routes/games');        // my route to games handler    
 const rootrouter = require('./routes/root');          // my route to /
 
 // ENV things
@@ -13,7 +13,7 @@ const port = process.env.PORT || fallbackport;
 // setting up express
 const app = express();                  // create object app from express
 app.use(express.json());                // configure the object to handle json
-app.use('/api/v1/games', games);        // say middleware to use for this route the const that was importet before
+app.use('/api/v1/games', gamesrouter);  // say middleware to use for this route the const that was importet before
 app.use('/', rootrouter);               // use the router to route /
 
 

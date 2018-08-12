@@ -33,8 +33,8 @@ function validateGame(game) {
 
 // CRUD things
 // GET
-router.get('/', (req, res) => { // you can youse the root here, cause you habe been routed
-    res.send(games);
+router.get('/', (req, res) => { // because of the router u use / here but it is /api/v1..
+    res.send(games);            // see index js setup for this route to here
     console.log('someone listed your games');
 });
 
@@ -127,5 +127,3 @@ router.delete('/:id', (req, res) => {
 
 // Export the Router
 module.exports = router;
-// and try to export the database as whell
-// module.exports.games = games;
