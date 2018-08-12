@@ -54,8 +54,6 @@ function getAllPlayers() {
 }
 
 
-
-
 // define routes
 // root route
 app.get('/', (req, res) => {
