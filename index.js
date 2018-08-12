@@ -94,7 +94,10 @@ app.put('/api/v1/games/:id', (req, res) => {
     // lookup the game
     const game = games.find(c => c.id === parseInt(req.params.id));
     // if not exists return 404
-    if (!game) res.status(404).send('Game id not found');
+    if (!game) {
+        res.status(404).send('Game id not found');
+        return;
+    }
     
     // othervise validate
     // old way --> const result = validateGame(req.body);
@@ -118,6 +121,21 @@ app.put('/api/v1/games/:id', (req, res) => {
     console.log(`someone updated game with id: ${game.id}`);
 });
 
+// DELETE
+app.delete('/api/v1/games/:id', (req, res) => {
+    const game = games.find(c => c.id === parseInt(req.params.id));
+    if (!game) {
+        res.status(404).send('Game id not found');
+        return;
+    }
+
+    const index = games.indexOf(game);
+    games.splice(index, 1);
+
+    res.send(game);
+
+    console.log(`someone deleted game with id: ${game.id}`);
+});
 
 
 
