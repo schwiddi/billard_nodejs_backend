@@ -54,7 +54,8 @@ function getAllPlayers() {
             allplayers.push(games[i].playerB);
         }
     }
-    return allplayers;
+    sorted = allplayers.sort();
+    return sorted;
 }
 
 
