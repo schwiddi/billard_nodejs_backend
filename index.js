@@ -21,17 +21,32 @@ const games = [
     { id: 5, playerA: 'Schwiddi', playerB: 'Hazem', scorePlayerA: 0, scorePlayerB: 1 }
 ];
 
+
+// Validate Function
+function validateGame(game) {
+    const schema = {
+        playerA: Joi.string().min(2).required(),
+        playerB: Joi.string().min(2).required(),
+        scorePlayerA: Joi.number().integer().min(0).max(1).required(),
+        scorePlayerB: Joi.number().integer().min(0).max(1).required(),
+    };
+    return Joi.validate(game, schema);
+}
+
+
+
+
 // define routes
 // root route
 app.get('/', (req, res) => {
     res.send('<h1>Hello World..</h1><p><a href="api/v1/games">use api/v1/games ...</a></p>');
-    console.log('someone has come to the root of your node..');
+    console.log('someone landed on the root..');
 });
 
 // get all games
 app.get('/api/v1/games', (req, res) => {
     res.send(games);
-    console.log('someone used your games api');
+    console.log('someone listed your games');
 });
 
 // get game by id
@@ -41,30 +56,23 @@ app.get('/api/v1/games/:id', (req, res) => {
     // and cause of this is a string not an int
     // we need to parse it via global function parseInt
     const game = games.find(c => c.id === parseInt(req.params.id));
-    if (!game) res.status(404).send('Game id not found');
+    if (!game) {
+        res.status(404).send('Game id not found');
+        return;
+    }
+    
     res.send(game);
+    console.log(`someone listed game id: ${game.id}`);
 });
 
 // create a new game
 // or POST a Game to the backend to say
 app.post('/api/v1/games', (req, res) => {
-    const schemaforjoi = {
-        playerA: Joi.string().min(2).required(),
-        playerB: Joi.string().min(2).required(),
-        scorePlayerA: Joi.number().integer().min(0).max(1).required(),
-        scorePlayerB: Joi.number().integer().min(0).max(1).required()
-    };
-
-    const validateresult = Joi.validate(req.body, schemaforjoi);
-
-    if (validateresult.error) {
-        res.status(400).send(validateresult.error.details[0].message);
+    const { error } = validateGame(req.body);
+    if (error) {
+        res.status(400).send(error.details[0].message);
         return;
     }
-
-
-
-
 
     const game = {
         id: games.length + 1,
@@ -76,8 +84,39 @@ app.post('/api/v1/games', (req, res) => {
 
     games.push(game);
     res.send(game);
+    console.log(`someone added a new game, the id is: ${game.id}`);
 });
 
+
+
+// PUT or UPDATE
+app.put('/api/v1/games/:id', (req, res) => {
+    // lookup the game
+    const game = games.find(c => c.id === parseInt(req.params.id));
+    // if not exists return 404
+    if (!game) res.status(404).send('Game id not found');
+    
+    // othervise validate
+    // old way --> const result = validateGame(req.body);
+    // and here used object destructuring
+    const { error } = validateGame(req.body);
+    // if invalid 400
+    if (error) {
+        res.status(400).send(error.details[0].message);
+        return;
+    }
+
+    // update the game
+    game.playerA = req.body.playerA;
+    game.playerB = req.body.playerB;
+    game.scorePlayerA = req.body.scorePlayerA;
+    game.scorePlayerB = req.body.scorePlayerB;
+
+    // return the updated game
+    res.send(game);
+
+    console.log(`someone updated game with id: ${game.id}`);
+});
 
 
 
