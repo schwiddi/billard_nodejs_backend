@@ -18,8 +18,8 @@ const Game = mongoose.model('Game', gameSchema);
 async function saveGame() {
     try {
         const game = new Game({
-            playerA: 'Schwiddi',
-            playerB: 'Basil',
+            playerA: 'Karl',
+            playerB: 'Tim',
             scoreplayerA: 1,
             scoreplayerB: 0
         });
@@ -56,7 +56,7 @@ async function getGameById(id) {
         console.log('arrived in the catch', err.message)
     }
 }
-getGameById('5b7209673b2d166297d078d1');
+//getGameById('5b7209673b2d166297d078d1');
 
 // delete game by id
 async function deleteGameById(id) {
@@ -68,4 +68,16 @@ async function deleteGameById(id) {
         console.log('arrived in the catch', err.message)
     }
 }
-deleteGameById('5b7209673b2d166297d078d1');
+//deleteGameById('5b7209673b2d166297d078d1');
+
+// get all games from player
+async function getGameFromPlayerByName(player) {
+    try {
+        const games = await Game.find({$or: [{ playerA: player},{ playerB: player}]})
+        console.log(games);
+    }
+    catch(err) {
+        console.log('arrived in the catch', err.message)
+    }
+}
+getGameFromPlayerByName('Schwiddi');
