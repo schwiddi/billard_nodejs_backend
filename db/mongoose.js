@@ -4,15 +4,39 @@ mongoose.connect('mongodb://localhost/r21billard')
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Catch Method: ',err));
 
-// const gamesSchema = new mongoose.Schema({
-//   playerA: String,
-//   playerB: String, 
-//   scoreplayerA: Number, 
-//   scoreplayerB: Number, 
-//   date: Date
-// });
+const gameSchema = new mongoose.Schema({
+  playerA: String,
+  playerB: String, 
+  scoreplayerA: Number, 
+  scoreplayerB: Number, 
+  date: { type: Date, default: Date.now },
+  isApproved: { type: Boolean, default: false }
+});
+const Game = mongoose.model('Game', gameSchema);
 
-// const Games = mongoose.model('Games', GamesSchema);
+// new game
+async function saveGame() {
+    try {
+        const game = new Game({
+            playerA: 'Schwiddi',
+            playerB: 'Basil',
+            scoreplayerA: 1,
+            scoreplayerB: 0
+        });
+        const result = await game.save();
+        console.log('here is the game you have stored: ', result);
+        return(result._id)
+    }
+    catch(err) {
+        console.log('arrived in the catch', err.message)
+    }  
+
+}
+saveGame();
+
+
+
+
 
 // async function getGames() {
 //   return await Games
