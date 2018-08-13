@@ -29,25 +29,43 @@ async function saveGame() {
     }
     catch(err) {
         console.log('arrived in the catch', err.message)
-    }  
-
+    }
 }
-saveGame();
+//saveGame();
 
 
+// get games
+async function getGames() {
+    try {
+        const games = await Game.find();
+        console.log(games);
+    }
+    catch(err) {
+        console.log('arrived in the catch', err.message)
+    }
+}
+// getGames();
 
+// get game by id
+async function getGameById(id) {
+    try {
+        const game = await Game.findById(id);
+        console.log(game);
+    }
+    catch(err) {
+        console.log('arrived in the catch', err.message)
+    }
+}
+getGameById('5b7209673b2d166297d078d1');
 
-
-// async function getGames() {
-//   return await Games
-//   //.find({ isPublished: true, tags: 'backend' })
-//   //.sort({ name: 1 })
-//   //.select({ name: 1, author: 1 });
-// }
-
-// async function run() {
-//   const games = await getGames();
-//   console.log(games);
-// }
-
-// run();
+// delete game by id
+async function deleteGameById(id) {
+    try {
+        const game = await Game.findByIdAndRemove(id);
+        console.log(game);
+    }
+    catch(err) {
+        console.log('arrived in the catch', err.message)
+    }
+}
+deleteGameById('5b7209673b2d166297d078d1');
