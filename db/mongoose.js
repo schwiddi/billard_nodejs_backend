@@ -73,7 +73,8 @@ async function deleteGameById(id) {
 // get all games from player
 async function getGameFromPlayerByName(player) {
     try {
-        const games = await Game.find({$or: [{ playerA: player},{ playerB: player}]})
+        const games = await Game
+            .find({$or: [{ playerA: player},{ playerB: player}]})
         console.log(games);
     }
     catch(err) {
