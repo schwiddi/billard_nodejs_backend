@@ -34,8 +34,8 @@ async function saveGame() {
 //saveGame();
 
 
-// get games
-async function getGames() {
+// get all games
+async function getAllGames() {
     try {
         const games = await Game.find();
         console.log(games);
@@ -44,7 +44,7 @@ async function getGames() {
         console.log('arrived in the catch', err.message)
     }
 }
-// getGames();
+// getAllGames();
 
 // get game by id
 async function getGameById(id) {
