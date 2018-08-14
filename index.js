@@ -29,9 +29,9 @@ debuginit('Express setup done.');
 
 // Mongoose setup
 debugdb('Setting up MongoDB connection...');
-mongoose.connect('mongodb://localhost/r21billard')
+mongoose.connect('mongodb://localhost:27017/r21billard', { useNewUrlParser: true })
     .then(() => debugdb('Connection to MongoDB done.'))
-    .catch(err => debugdb('Having problems connecting to DB!!!', err));
+    .catch(err => debugdb('Having problems connecting to DB!!!', err.message));
 
 
 // starting server stuff
