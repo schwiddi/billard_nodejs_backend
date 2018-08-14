@@ -5,6 +5,7 @@
 const express = require('express');     // middleware
 const Joi = require('joi');             // validation
 const debuggameapi = require('debug')('app:gamesapi');
+const mongoose = require('mongoose');
 
 // ENV things
 
