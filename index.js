@@ -5,6 +5,7 @@
 // Import things
 const express = require('express');                   // middleware
 const gamesrouter = require('./routes/games');        // my route to games handler    
+const playersrouter = require('./routes/players');
 const rootrouter = require('./routes/root');          // my route to /
 const debuginit = require('debug')('app:init');
 const debugdb = require('debug')('app:db');
@@ -23,6 +24,7 @@ const app = express();                  // create object app from express
 debuginit('Express started.');
 app.use(express.json());                // configure the object to handle json
 app.use('/api/v1/games', gamesrouter);  // say middleware to use for this route the const that was importet before
+app.use('/api/v1/players', playersrouter);
 app.use('/', rootrouter);               // use the router to route /
 debuginit('Express setup done.');
 
