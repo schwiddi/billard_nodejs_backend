@@ -4,7 +4,7 @@
 // Import things
 const express = require('express');     // middleware
 const Joi = require('joi');             // validation
-const debuggameapi = require('debug')('app:gamesapi');
+const debuggames = require('debug')('app:games');
 const mongoose = require('mongoose');
 const _ = require('underscore');
 
@@ -32,26 +32,31 @@ function validateGame(game) {
         scoreplayerA: Joi.number().integer().min(0).max(1).required(),
         scoreplayerB: Joi.number().integer().min(0).max(1).required(),
     };
-    debuggameapi('Game Input Validate Function was called..')
+    debuggames('Game Input Validate Function was called..')
     return Joi.validate(game, schema);
 }
 
 // CRUD things
 // GET
 router.get('/', async (req, res) => { // because of the router u use / here but it is /api/v1..
-    const games = await Game.find().sort('date');
+    const games = await Game
+    .find()
+    .sort('date')
+    .select({ playerA: 1, playerB: 1, scoreplayerA: 1 , scoreplayerB: 1, date: 1});
     res.send(games);
-    debuggameapi('someone listed your games');
+    debuggames('someone listed your games');
 });
 
 // GET by id
 router.get('/:id', async (req, res) => {
     try {
-        const game = await Game.findById(req.params.id);
+        const game = await Game
+        .findById(req.params.id)
+        .select({ playerA: 1, playerB: 1, scoreplayerA: 1 , scoreplayerB: 1, date: 1});
         res.send(game);
-        debuggameapi(`someone listed game id: ${req.param.id}`);
+        debuggames(`someone listed game id: ${req.param.id}`);
     } catch (err) {
-        debuggameapi(`catch erreicht`);
+        debuggames(`catch erreicht`);
         return res.status(404).send('Game id not found..');
     }
 });
@@ -60,38 +65,44 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     const { error } = validateGame(req.body);
     if (error) {
-        debuggameapi(`someone wanted to add a game but the Joi validation was not ok`);
+        debuggames(`someone wanted to add a game but the Joi validation was not ok`);
         return res.status(400).send(error.details[0].message);
     }
 
-    let game = new Game( {
+    let newgame = new Game( {
         playerA: req.body.playerA,
         playerB: req.body.playerB,
         scoreplayerA: req.body.scoreplayerA,
         scoreplayerB: req.body.scoreplayerB
     });
 
-    game = await game.save();
-    res.send(game);
-    debuggameapi(`someone added a new game, the id is: ${game.id}`);
+    newgamereturn = await newgame.save();
+
+    const getnewgame = await Game
+    .findById(newgamereturn.id)
+    .select({ playerA: 1, playerB: 1, scoreplayerA: 1 , scoreplayerB: 1, date: 1});
+    res.send(getnewgame);
+    debuggames(`someone added a new game, the id is: ${newgamereturn.id}`);
 });
 
 // UPDATE a game by id
 router.put('/:id', async (req, res) => {
     const { error } = validateGame(req.body);
     if (error) {
-        debuggameapi(`someone wanted to updated a game but the validation was not ok`);
+        debuggames(`someone wanted to updated a game but the validation was not ok`);
         return res.status(400).send(error.details[0].message);
     } else {
-        debuggameapi(`Update validation ok`);
+        debuggames(`Update validation ok`);
     }
 
     try {
-        const game = await Game.findById(req.params.id);
+        const game = await Game
+        .findById(req.params.id)
+        .select({ playerA: 1, playerB: 1, scoreplayerA: 1 , scoreplayerB: 1, date: 1});
         res.send(game);
-        debuggameapi(`someone is updating game id: ${req.param.id}`);
+        debuggames(`someone is updating game id: ${req.param.id}`);
     } catch (err) {
-        debuggameapi(`someone wanted to updated a game that does not exist`);
+        debuggames(`someone wanted to updated a game that does not exist`);
         return res.status(404).send('The game you like to update does not exist..');
     }
     // game schreiben mit neuen werten
@@ -101,24 +112,26 @@ router.put('/:id', async (req, res) => {
         scoreplayerA: req.body.scoreplayerA,
         scoreplayerB: req.body.scoreplayerB
     }, { new: true});
-    debuggameapi(`someone updated a game by id`);
+    debuggames(`someone updated a game by id`);
 });
 
 // DELETE a game by id
 router.delete('/:id', async (req, res) => {
     try {
-        const game = await Game.findById(req.params.id);
+        const game = await Game
+        .findById(req.params.id)
+        .select({ playerA: 1, playerB: 1, scoreplayerA: 1 , scoreplayerB: 1, date: 1});
         if (_.isEmpty(game)) {
             return res.status(404).send('This game was already deleted')
         }
         res.send(game);
-        debuggameapi(`someone is about to delete a game with id: ${req.params.id}`);
+        debuggames(`someone is about to delete a game with id: ${req.params.id}`);
     } catch (err) {
-        debuggameapi(`someone wanted to delete a game that does not exist`);
+        debuggames(`someone wanted to delete a game that does not exist`);
         return res.status(404).send('The game you like to delete does not exist..');
     }
     game = await Game.findByIdAndRemove(req.params.id);
-    debuggameapi(`game deleted ${req.params.id}`);
+    debuggames(`game deleted ${req.params.id}`);
 });
 
 
