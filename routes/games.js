@@ -6,124 +6,119 @@ const express = require('express');     // middleware
 const Joi = require('joi');             // validation
 const debuggameapi = require('debug')('app:gamesapi');
 const mongoose = require('mongoose');
+const _ = require('underscore');
 
 // ENV things
 
+// Schema for mongoose games
+const gameSchema = new mongoose.Schema({
+    playerA: String,
+    playerB: String, 
+    scoreplayerA: Number, 
+    scoreplayerB: Number, 
+    date: { type: Date, default: Date.now },
+    isApproved: { type: Boolean, default: false }
+  });
+const Game = mongoose.model('Game', gameSchema); // creating model
+
 // setting up express
 const router = express.Router();        // create object
-
-// temporar Database :)
-const games = [
-    { id: 1, playerA: 'Schwiddi', playerB: 'Basil', scorePlayerA: 1, scorePlayerB: 0 },
-    { id: 2, playerA: 'Schwiddi', playerB: 'Basil', scorePlayerA: 0, scorePlayerB: 1 },
-    { id: 3, playerA: 'Mani', playerB: 'Basil', scorePlayerA: 0, scorePlayerB: 1 },
-    { id: 4, playerA: 'Hazem', playerB: 'Schwiddi', scorePlayerA: 1, scorePlayerB: 0 }, 
-    { id: 5, playerA: 'Schwiddi', playerB: 'Hazem', scorePlayerA: 0, scorePlayerB: 1 }
-];
 
 // Input Validation for Games
 function validateGame(game) {
     const schema = {
         playerA: Joi.string().min(2).required(),
         playerB: Joi.string().min(2).required(),
-        scorePlayerA: Joi.number().integer().min(0).max(1).required(),
-        scorePlayerB: Joi.number().integer().min(0).max(1).required(),
+        scoreplayerA: Joi.number().integer().min(0).max(1).required(),
+        scoreplayerB: Joi.number().integer().min(0).max(1).required(),
     };
     debuggameapi('Game Input Validate Function was called..')
     return Joi.validate(game, schema);
 }
 
-
 // CRUD things
 // GET
-router.get('/', (req, res) => { // because of the router u use / here but it is /api/v1..
-    res.send(games);            // see index js setup for this route to here
+router.get('/', async (req, res) => { // because of the router u use / here but it is /api/v1..
+    const games = await Game.find().sort('date');
+    res.send(games);
     debuggameapi('someone listed your games');
 });
 
 // GET by id
-router.get('/:id', (req, res) => {
-    // games.find is standard function for arrays
-    // for c look if c.id equals req.params.id
-    // and cause of this is a string not an int
-    // we need to parse it via global function parseInt
-    const game = games.find(c => c.id === parseInt(req.params.id));
-    if (!game) {
-        debuggameapi(`someone looked for a game id that does not exist`);
-        return res.status(404).send('Game id not found');
+router.get('/:id', async (req, res) => {
+    try {
+        const game = await Game.findById(req.params.id);
+        res.send(game);
+        debuggameapi(`someone listed game id: ${req.param.id}`);
+    } catch (err) {
+        debuggameapi(`catch erreicht`);
+        return res.status(404).send('Game id not found..');
     }
-    
-    res.send(game);
-    debuggameapi(`someone listed game id: ${game.id}`);
 });
 
 // POST new game
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     const { error } = validateGame(req.body);
     if (error) {
-        debuggameapi(`someone wanted to add a game but the validation was not ok`);
+        debuggameapi(`someone wanted to add a game but the Joi validation was not ok`);
         return res.status(400).send(error.details[0].message);
     }
 
-    const game = {
-        id: games.length + 1,
+    let game = new Game( {
         playerA: req.body.playerA,
         playerB: req.body.playerB,
-        scorePlayerA: req.body.scorePlayerA,
-        scorePlayerB: req.body.scorePlayerB
-    };
+        scoreplayerA: req.body.scoreplayerA,
+        scoreplayerB: req.body.scoreplayerB
+    });
 
-    games.push(game);
+    game = await game.save();
     res.send(game);
     debuggameapi(`someone added a new game, the id is: ${game.id}`);
 });
 
 // UPDATE a game by id
-router.put('/:id', (req, res) => {
-    // lookup the game
-    const game = games.find(c => c.id === parseInt(req.params.id));
-    // if not exists return 404
-    if (!game) {
-        debuggameapi(`someone wanted to updated a game that does not exist`);
-        return res.status(404).send('Game id not found');
-    }
-    
-    // othervise validate
-    // old way --> const result = validateGame(req.body);
-    // and here used object destructuring
+router.put('/:id', async (req, res) => {
     const { error } = validateGame(req.body);
-    // if invalid 400
     if (error) {
         debuggameapi(`someone wanted to updated a game but the validation was not ok`);
         return res.status(400).send(error.details[0].message);
+    } else {
+        debuggameapi(`Update validation ok`);
     }
 
-    // update the game
-    game.playerA = req.body.playerA;
-    game.playerB = req.body.playerB;
-    game.scorePlayerA = req.body.scorePlayerA;
-    game.scorePlayerB = req.body.scorePlayerB;
-
-    // return the updated game
-    res.send(game);
-
-    debuggameapi(`someone updated game with id: ${game.id}`);
+    try {
+        const game = await Game.findById(req.params.id);
+        res.send(game);
+        debuggameapi(`someone is updating game id: ${req.param.id}`);
+    } catch (err) {
+        debuggameapi(`someone wanted to updated a game that does not exist`);
+        return res.status(404).send('The game you like to update does not exist..');
+    }
+    // game schreiben mit neuen werten
+    game = await Game.findByIdAndUpdate(req.params.id, {
+        playerA: req.body.playerA,
+        playerB: req.body.playerB,
+        scoreplayerA: req.body.scoreplayerA,
+        scoreplayerB: req.body.scoreplayerB
+    }, { new: true});
+    debuggameapi(`someone updated a game by id`);
 });
 
 // DELETE a game by id
-router.delete('/:id', (req, res) => {
-    const game = games.find(c => c.id === parseInt(req.params.id));
-    if (!game) {
-        debuggameapi(`someone wanted to deleted game that does not exist: ${game.id}`);
-        return res.status(404).send('Game id not found');
+router.delete('/:id', async (req, res) => {
+    try {
+        const game = await Game.findById(req.params.id);
+        if (_.isEmpty(game)) {
+            return res.status(404).send('This game was already deleted')
+        }
+        res.send(game);
+        debuggameapi(`someone is about to delete a game with id: ${req.params.id}`);
+    } catch (err) {
+        debuggameapi(`someone wanted to delete a game that does not exist`);
+        return res.status(404).send('The game you like to delete does not exist..');
     }
-
-    const index = games.indexOf(game);
-    games.splice(index, 1);
-
-    res.send(game);
-
-    debuggameapi(`someone deleted game with id: ${game.id}`);
+    game = await Game.findByIdAndRemove(req.params.id);
+    debuggameapi(`game deleted ${req.params.id}`);
 });
 
 
