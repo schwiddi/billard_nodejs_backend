@@ -31,10 +31,13 @@ debuginit('Express setup done.');
 debugdb('Setting up MongoDB connection...');
 mongoose.connect('mongodb://localhost:27017/r21billard', { useNewUrlParser: true })
     .then(() => debugdb('Connection to MongoDB done.'))
-    .catch(err => debugdb('Having problems connecting to DB!!!', err.message));
+    .catch(err => {
+        debugdb('Having problems connecting to DB!!!', err.message)
+        process.exit(1);
+    });
 
 
 // starting server stuff
 app.listen(port);
-console.log(`started listener on port ${port}`);
-debuginit('Server started');
+console.log(`Backend started on ${port}`);
+debuginit('Backend started');
