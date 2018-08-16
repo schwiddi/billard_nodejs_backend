@@ -32,8 +32,8 @@ function validateGame(game) {
         scoreplayerA: Joi.number().integer().min(0).max(1).required(),
         scoreplayerB: Joi.number().integer().min(0).max(1).required(),
     };
-    debuggames('Game Input Validate Function was called..')
-    return Joi.validate(game, schema);
+    debuggames(`Game Input Validate Function was called...`);
+    return Joi.validate(game, schema)
 }
 
 // CRUD things
