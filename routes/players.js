@@ -2,21 +2,21 @@
 /*jshint esversion: 6 */
 
 // Import things
-const express = require('express');     // middleware
-const debugplayers = require('debug')('app:players');
-const mongoose = require('mongoose');
+const express = require("express"); // middleware
+const debugplayers = require("debug")("app:players");
+const mongoose = require("mongoose");
 
 // ENV things
 
 // Schema for mongoose games
 const playerSchema = new mongoose.Schema({
-    playerA: String,
-    playerB: String
-  });
-const Player = mongoose.model('Player', playerSchema); // creating model
+  playerA: String,
+  playerB: String
+});
+const Player = mongoose.model("Player", playerSchema); // creating model
 
 // setting up express
-const router = express.Router();        // create object
+const router = express.Router(); // create object
 
 // Input Validation for Games
 // function validateGame(game) {
@@ -30,10 +30,11 @@ const router = express.Router();        // create object
 //     return Joi.validate(game, schema);
 // }
 
-router.get('/', async (req, res) => { // because of the router u use / here but it is /api/v1..
-    const players = await Player.find().sort('date');
-    res.send(players);
-    debugplayers('someone listed your games');
+router.get("/", async (req, res) => {
+  // because of the router u use / here but it is /api/v1..
+  const players = await Player.find().sort("date");
+  res.send(players);
+  debugplayers("someone listed your games");
 });
 
 // router.get('/:id', async (req, res) => {
@@ -111,17 +112,8 @@ router.get('/', async (req, res) => { // because of the router u use / here but 
 //     debuggameapi(`game deleted ${req.params.id}`);
 // });
 
-
-
 // Export the Router
 module.exports = router;
-
-
-
-
-
-
-
 
 // allplayers function
 // function getAllPlayers() {
@@ -129,7 +121,7 @@ module.exports = router;
 //     anzahlitemsingamesarray = games.length;
 //     for (i = 0; i < anzahlitemsingamesarray; i++) {
 //         let resultplayera = allplayers.find(c => c === games[i].playerA);
-//         if (!resultplayera) {  
+//         if (!resultplayera) {
 //             allplayers.push(games[i].playerA);
 //         }
 //         let resultplayerb = allplayers.find(c => c === games[i].playerB);
@@ -141,11 +133,7 @@ module.exports = router;
 //     return sorted;
 // }
 
-
 // define routes
-
-
-
 
 // here can go an endpoint to list all players
 // that have played on the table
