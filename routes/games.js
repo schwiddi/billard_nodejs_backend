@@ -2,11 +2,11 @@
 /*jshint esversion: 6 */
 
 // Import things
-const express = require("express"); // middleware
-const Joi = require("joi"); // validation
-const debuggames = require("debug")("app:games");
-const Game = require("../db/mongo_connector");
-const _ = require("underscore");
+const express = require('express'); // middleware
+const Joi = require('joi'); // validation
+const debuggames = require('debug')('app:games');
+const Game = require('../db/mongo_connector');
+const _ = require('underscore');
 
 // ENV things
 
@@ -39,10 +39,10 @@ function validateGame(game) {
 
 // CRUD things
 // GET
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   // because of the router u use / here but it is /api/v1..
   const games = await Game.find()
-    .sort("date")
+    .sort('date')
     .select({
       playerA: 1,
       playerB: 1,
@@ -51,11 +51,11 @@ router.get("/", async (req, res) => {
       date: 1
     });
   res.send(games);
-  debuggames("someone listed your games");
+  debuggames('someone listed your games');
 });
 
 // GET by id
-router.get("/:id", async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const game = await Game.findById(req.params.id).select({
       playerA: 1,
@@ -66,18 +66,18 @@ router.get("/:id", async (req, res) => {
     });
     if (_.isEmpty(game)) {
       debuggames(`someone listed game id: ${req.params.id} which was deleted`);
-      return res.status(404).send("The game you like to get was deleted...");
+      return res.status(404).send('The game you like to get was deleted...');
     }
     res.send(game);
     debuggames(`someone listed game id: ${req.params.id}`);
   } catch (err) {
     debuggames(`someone wanted to get a game that does not exist`);
-    return res.status(404).send("Game id not found..");
+    return res.status(404).send('Game id not found..');
   }
 });
 
 // POST new game
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   const { error } = validateGame(req.body);
   if (error) {
     debuggames(
@@ -107,17 +107,17 @@ router.post("/", async (req, res) => {
 });
 
 // UPDATE a game by id
-router.put("/:id", async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const game = await Game.findById(req.params.id);
     if (_.isEmpty(game)) {
       debuggames(`someone wanted to update a game that was deleted....`);
-      return res.status(404).send("The game you like to update was deleted..");
+      return res.status(404).send('The game you like to update was deleted..');
     }
     debuggames(`someone is about to update a game with id: ${req.params.id}`);
   } catch (err) {
     debuggames(`someone wanted to update a game that does not exist`);
-    return res.status(404).send("The game you like to update does not exist..");
+    return res.status(404).send('The game you like to update does not exist..');
   }
 
   const { error } = validateGame(req.body);
@@ -155,7 +155,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // DELETE a game by id
-router.delete("/:id", async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const game = await Game.findById(req.params.id).select({
       playerA: 1,
@@ -165,13 +165,13 @@ router.delete("/:id", async (req, res) => {
       date: 1
     });
     if (_.isEmpty(game)) {
-      return res.status(404).send("This game was already deleted");
+      return res.status(404).send('This game was already deleted');
     }
     res.send(game);
     debuggames(`someone is about to delete a game with id: ${req.params.id}`);
   } catch (err) {
     debuggames(`someone wanted to delete a game that does not exist`);
-    return res.status(404).send("The game you like to delete does not exist..");
+    return res.status(404).send('The game you like to delete does not exist..');
   }
   game = await Game.findByIdAndRemove(req.params.id);
   debuggames(`game deleted ${req.params.id}`);
@@ -179,10 +179,10 @@ router.delete("/:id", async (req, res) => {
 
 // DELETE all games
 // should not be usable in Prod env
-router.delete("/", async (req, res) => {
+router.delete('/', async (req, res) => {
   game = await Game.deleteMany();
   debuggames(`all games have been delted`);
-  return res.status(200).send("all games have been deleted..");
+  return res.status(200).send('all games have been deleted..');
 });
 
 // Export the Router

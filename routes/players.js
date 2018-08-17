@@ -2,9 +2,9 @@
 /*jshint esversion: 6 */
 
 // Import things
-const express = require("express"); // middleware
-const debugplayers = require("debug")("app:players");
-const mongoose = require("mongoose");
+const express = require('express'); // middleware
+const debugplayers = require('debug')('app:players');
+const mongoose = require('mongoose');
 
 // ENV things
 
@@ -13,7 +13,7 @@ const playerSchema = new mongoose.Schema({
   playerA: String,
   playerB: String
 });
-const Player = mongoose.model("Player", playerSchema); // creating model
+const Player = mongoose.model('Player', playerSchema); // creating model
 
 // setting up express
 const router = express.Router(); // create object
@@ -30,11 +30,11 @@ const router = express.Router(); // create object
 //     return Joi.validate(game, schema);
 // }
 
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   // because of the router u use / here but it is /api/v1..
-  const players = await Player.find().sort("date");
+  const players = await Player.find().sort('date');
   res.send(players);
-  debugplayers("someone listed your games");
+  debugplayers('someone listed your games');
 });
 
 // router.get('/:id', async (req, res) => {

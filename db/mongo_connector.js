@@ -3,7 +3,7 @@
 
 // Import things
 // const debuggames = require('debug')('app:games');
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 // ENV things
 
@@ -18,7 +18,7 @@ const gameSchema = new mongoose.Schema({
 });
 
 // Creating Mongoose Model
-const Game = mongoose.model("Game", gameSchema); // creating model
+const Game = mongoose.model('Game', gameSchema); // creating model
 
 // now Export this Model
 module.exports = Game;
