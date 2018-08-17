@@ -5,21 +5,10 @@
 const express = require('express');     // middleware
 const Joi = require('joi');             // validation
 const debuggames = require('debug')('app:games');
-const mongoose = require('mongoose');
+const Game = require('../db/mongo_connector')
 const _ = require('underscore');
 
 // ENV things
-
-// Schema for mongoose games
-const gameSchema = new mongoose.Schema({
-    playerA: String,
-    playerB: String, 
-    scoreplayerA: Number, 
-    scoreplayerB: Number, 
-    date: { type: Date, default: Date.now },
-    isApproved: { type: Boolean, default: false }
-  });
-const Game = mongoose.model('Game', gameSchema); // creating model
 
 // setting up express
 const router = express.Router();        // create object
