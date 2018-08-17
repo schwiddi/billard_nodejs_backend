@@ -33,7 +33,7 @@ function validateGame(game) {
       .max(1)
       .required()
   };
-  debuggames(`Game Input Validate Function was called...`);
+  debuggames(`validation function was called`);
   return Joi.validate(game, schema);
 }
 
@@ -51,7 +51,7 @@ router.get('/', async (req, res) => {
       date: 1
     });
   res.send(games);
-  debuggames('someone listed your games');
+  debuggames('games listed');
 });
 
 // GET by id
@@ -65,13 +65,13 @@ router.get('/:id', async (req, res) => {
       date: 1
     });
     if (_.isEmpty(game)) {
-      debuggames(`someone listed game id: ${req.params.id} which was deleted`);
+      debuggames(`deleted game listed: ${req.params.id}`);
       return res.status(404).send('The game you like to get was deleted...');
     }
     res.send(game);
-    debuggames(`someone listed game id: ${req.params.id}`);
+    debuggames(`game listed: ${req.params.id}`);
   } catch (err) {
-    debuggames(`someone wanted to get a game that does not exist`);
+    debuggames(`unknown game was listed ${req.params.id}`);
     return res.status(404).send('Game id not found..');
   }
 });
@@ -80,9 +80,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   const { error } = validateGame(req.body);
   if (error) {
-    debuggames(
-      `someone wanted to add a game but the Joi validation was not ok`
-    );
+    debuggames(`joi input validation was nok`);
     return res.status(400).send(error.details[0].message);
   }
 
@@ -103,7 +101,7 @@ router.post('/', async (req, res) => {
     date: 1
   });
   res.send(getnewgame);
-  debuggames(`someone added a new game, the id is: ${newgamereturn.id}`);
+  debuggames(`new game: ${getnewgame.id}`);
 });
 
 // UPDATE a game by id
@@ -111,23 +109,20 @@ router.put('/:id', async (req, res) => {
   try {
     const game = await Game.findById(req.params.id);
     if (_.isEmpty(game)) {
-      debuggames(`someone wanted to update a game that was deleted....`);
+      debuggames(`forbidden update on already delted game`);
       return res.status(404).send('The game you like to update was deleted..');
     }
-    debuggames(`someone is about to update a game with id: ${req.params.id}`);
   } catch (err) {
-    debuggames(`someone wanted to update a game that does not exist`);
+    debuggames(`update in unknown game`);
     return res.status(404).send('The game you like to update does not exist..');
   }
 
   const { error } = validateGame(req.body);
   if (error) {
-    debuggames(
-      `someone wanted to updated a game but the validation was not ok`
-    );
+    debuggames(`update validation was nok`);
     return res.status(400).send(error.details[0].message);
   } else {
-    debuggames(`Update validation ok`);
+    debuggames(`update validation was ok`);
   }
 
   // game schreiben mit neuen werten
@@ -141,7 +136,7 @@ router.put('/:id', async (req, res) => {
     },
     { new: true }
   );
-  debuggames(`someone updated a game with id: ${req.params.id}`);
+  debuggames(`update on game: ${req.params.id}`);
 
   const updatedgame = await Game.findById(req.params.id).select({
     playerA: 1,
@@ -165,12 +160,12 @@ router.delete('/:id', async (req, res) => {
       date: 1
     });
     if (_.isEmpty(game)) {
+      debuggames('delete on game that has been deleted before');
       return res.status(404).send('This game was already deleted');
     }
     res.send(game);
-    debuggames(`someone is about to delete a game with id: ${req.params.id}`);
   } catch (err) {
-    debuggames(`someone wanted to delete a game that does not exist`);
+    debuggames(`delete on unknown game`);
     return res.status(404).send('The game you like to delete does not exist..');
   }
   game = await Game.findByIdAndRemove(req.params.id);

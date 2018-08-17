@@ -3,17 +3,12 @@
 
 // Import things
 const express = require('express'); // middleware
+const Joi = require('joi'); // validation
 const debugplayers = require('debug')('app:players');
+const Game = require('../db/mongo_connector');
 const mongoose = require('mongoose');
 
 // ENV things
-
-// Schema for mongoose games
-const playerSchema = new mongoose.Schema({
-  playerA: String,
-  playerB: String
-});
-const Player = mongoose.model('Player', playerSchema); // creating model
 
 // setting up express
 const router = express.Router(); // create object
@@ -31,10 +26,32 @@ const router = express.Router(); // create object
 // }
 
 router.get('/', async (req, res) => {
-  // because of the router u use / here but it is /api/v1..
-  const players = await Player.find().sort('date');
-  res.send(players);
-  debugplayers('someone listed your games');
+  const games = await Game.find().select({
+    playerA: 1,
+    playerB: 1
+  });
+
+  let allplayers = [];
+
+  let length = games.length;
+
+  for (i = 0; i < length; i++) {
+    allplayers.push(games[i].playerA);
+    allplayers.push(games[i].playerB);
+  }
+
+  let playersdistinct = [];
+
+  length = allplayers.length;
+
+  for (i = 0; i < length; i++) {
+    let checkplayertmp = playersdistinct.find(c => c === allplayers[i]);
+    if (!checkplayertmp) {
+      playersdistinct.push(allplayers[i]);
+    }
+  }
+  debugplayers('players listed');
+  res.send(playersdistinct);
 });
 
 // router.get('/:id', async (req, res) => {
