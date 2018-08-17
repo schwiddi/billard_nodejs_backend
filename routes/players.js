@@ -54,6 +54,7 @@ router.get('/', async (req, res) => {
   res.send(playersdistinct);
 });
 
+// get all games from player
 // router.get('/:id', async (req, res) => {
 //     try {
 //         const game = await Game.findById(req.params.id);
