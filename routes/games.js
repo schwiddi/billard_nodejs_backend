@@ -42,10 +42,14 @@ router.get('/:id', async (req, res) => {
         const game = await Game
         .findById(req.params.id)
         .select({ playerA: 1, playerB: 1, scoreplayerA: 1 , scoreplayerB: 1, date: 1});
+        if (_.isEmpty(game)) {
+            debuggames(`someone listed game id: ${req.params.id} which was deleted`);
+            return res.status(404).send('The game you like to get was deleted...')
+        }
         res.send(game);
-        debuggames(`someone listed game id: ${req.param.id}`);
+        debuggames(`someone listed game id: ${req.params.id}`);
     } catch (err) {
-        debuggames(`catch erreicht`);
+        debuggames(`someone wanted to get a game that does not exist`);
         return res.status(404).send('Game id not found..');
     }
 });
@@ -76,6 +80,20 @@ router.post('/', async (req, res) => {
 
 // UPDATE a game by id
 router.put('/:id', async (req, res) => {
+    try {
+        const game = await Game
+        .findById(req.params.id);
+        if (_.isEmpty(game)) {
+            debuggames(`someone wanted to update a game that was deleted....`);
+            return res.status(404).send('The game you like to update was deleted..')
+        }
+        debuggames(`someone is about to update a game with id: ${req.params.id}`);
+    } catch (err) {
+        debuggames(`someone wanted to update a game that does not exist`);
+        return res.status(404).send('The game you like to update does not exist..');
+    }
+
+
     const { error } = validateGame(req.body);
     if (error) {
         debuggames(`someone wanted to updated a game but the validation was not ok`);
@@ -84,16 +102,6 @@ router.put('/:id', async (req, res) => {
         debuggames(`Update validation ok`);
     }
 
-    try {
-        const game = await Game
-        .findById(req.params.id)
-        .select({ playerA: 1, playerB: 1, scoreplayerA: 1 , scoreplayerB: 1, date: 1});
-        res.send(game);
-        debuggames(`someone is updating game id: ${req.param.id}`);
-    } catch (err) {
-        debuggames(`someone wanted to updated a game that does not exist`);
-        return res.status(404).send('The game you like to update does not exist..');
-    }
     // game schreiben mit neuen werten
     game = await Game.findByIdAndUpdate(req.params.id, {
         playerA: req.body.playerA,
@@ -101,7 +109,13 @@ router.put('/:id', async (req, res) => {
         scoreplayerA: req.body.scoreplayerA,
         scoreplayerB: req.body.scoreplayerB
     }, { new: true});
-    debuggames(`someone updated a game by id`);
+    debuggames(`someone updated a game with id: ${req.params.id}`);
+
+    const updatedgame = await Game
+    .findById(req.params.id)
+    .select({ playerA: 1, playerB: 1, scoreplayerA: 1 , scoreplayerB: 1, date: 1});
+
+    res.send(updatedgame)
 });
 
 // DELETE a game by id
