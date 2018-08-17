@@ -53,7 +53,8 @@ router.get('/', async (req, res) => {
     }
   }
   debugplayers('players listed');
-  res.send(playersdistinct);
+  const arraytojson = JSON.stringify(playersdistinct.sort());
+  res.send(arraytojson);
 });
 
 // get all games from player
