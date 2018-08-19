@@ -4,7 +4,7 @@
 // Import things
 const express = require('express'); // middleware
 const Joi = require('joi'); // validation
-const debuggames = require('debug')('app:games');
+const mydebug = require('../common/mydebug');
 const Game = require('../db/mongo_connector');
 const _ = require('underscore');
 
@@ -33,7 +33,7 @@ function validateGame(game) {
       .max(1)
       .required()
   };
-  debuggames(`validation function was called`);
+  mydebug(`validation function was called`);
   return Joi.validate(game, schema);
 }
 
@@ -52,11 +52,11 @@ router.get('/', async (req, res) => {
     });
 
   if (_.isEmpty(games)) {
-    debuggames(`no ganes in database to list... ${games}`);
+    mydebug(`no ganes in database to list... ${games}`);
     return res.status(404).send('Currently no Games in Database...');
   }
   res.send(games);
-  debuggames('games listed');
+  mydebug('games listed');
 });
 
 // GET by id
@@ -70,13 +70,13 @@ router.get('/:id', async (req, res) => {
       date: 1
     });
     if (_.isEmpty(game)) {
-      debuggames(`deleted game listed: ${req.params.id}`);
+      mydebug(`deleted game listed: ${req.params.id}`);
       return res.status(404).send('The game you like to get was deleted...');
     }
     res.send(game);
-    debuggames(`game listed: ${req.params.id}`);
+    mydebug(`game listed: ${req.params.id}`);
   } catch (err) {
-    debuggames(`unknown game was listed ${req.params.id}`);
+    mydebug(`unknown game was listed ${req.params.id}`);
     return res.status(404).send('Game id not found..');
   }
 });
@@ -85,7 +85,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   const { error } = validateGame(req.body);
   if (error) {
-    debuggames(`joi input validation was nok`);
+    mydebug(`joi input validation was nok`);
     return res.status(400).send(error.details[0].message);
   }
 
@@ -106,7 +106,7 @@ router.post('/', async (req, res) => {
     date: 1
   });
   res.send(getnewgame);
-  debuggames(`new game: ${getnewgame.id}`);
+  mydebug(`new game: ${getnewgame.id}`);
 });
 
 // UPDATE a game by id
@@ -114,20 +114,20 @@ router.put('/:id', async (req, res) => {
   try {
     const game = await Game.findById(req.params.id);
     if (_.isEmpty(game)) {
-      debuggames(`forbidden update on already delted game`);
+      mydebug(`forbidden update on already delted game`);
       return res.status(404).send('The game you like to update was deleted..');
     }
   } catch (err) {
-    debuggames(`update in unknown game`);
+    mydebug(`update in unknown game`);
     return res.status(404).send('The game you like to update does not exist..');
   }
 
   const { error } = validateGame(req.body);
   if (error) {
-    debuggames(`update validation was nok`);
+    mydebug(`update validation was nok`);
     return res.status(400).send(error.details[0].message);
   } else {
-    debuggames(`update validation was ok`);
+    mydebug(`update validation was ok`);
   }
 
   // game schreiben mit neuen werten
@@ -141,7 +141,7 @@ router.put('/:id', async (req, res) => {
     },
     { new: true }
   );
-  debuggames(`update on game: ${req.params.id}`);
+  mydebug(`update on game: ${req.params.id}`);
 
   const updatedgame = await Game.findById(req.params.id).select({
     playerA: 1,
@@ -165,23 +165,23 @@ router.delete('/:id', async (req, res) => {
       date: 1
     });
     if (_.isEmpty(game)) {
-      debuggames('delete on game that has been deleted before');
+      mydebug('delete on game that has been deleted before');
       return res.status(404).send('This game was already deleted');
     }
     res.send(game);
   } catch (err) {
-    debuggames(`delete on unknown game`);
+    mydebug(`delete on unknown game`);
     return res.status(404).send('The game you like to delete does not exist..');
   }
   game = await Game.findByIdAndRemove(req.params.id);
-  debuggames(`game deleted ${req.params.id}`);
+  mydebug(`game deleted ${req.params.id}`);
 });
 
 // DELETE all games
 // should not be usable in Prod env
 router.delete('/', async (req, res) => {
   game = await Game.deleteMany();
-  debuggames(`all games have been delted`);
+  mydebug(`all games have been delted`);
   return res.status(200).send('all games have been deleted..');
 });
 

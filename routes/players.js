@@ -3,7 +3,7 @@
 
 // Import things
 const express = require('express'); // middleware
-const debugplayers = require('debug')('app:players');
+const mydebug = require('../common/mydebug');
 const Game = require('../db/mongo_connector');
 const _ = require('underscore');
 
@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
   });
 
   if (_.isEmpty(games)) {
-    debugplayers(`no players in database to list... ${games}`);
+    mydebug(`no players in database to list... ${games}`);
     return res.status(404).send('Currently no Players in Database...');
   }
 
@@ -43,7 +43,7 @@ router.get('/', async (req, res) => {
       playersdistinct.push(allplayers[i]);
     }
   }
-  debugplayers('players listed');
+  mydebug('players listed');
   const arraytojson = JSON.stringify(playersdistinct.sort());
   res.send(arraytojson);
 });
@@ -53,7 +53,7 @@ router.get('/:id', async (req, res) => {
   const games = await Game.find({
     $or: [{ playerA: req.params.id }, { playerB: req.params.id }]
   });
-
+  mydebug(`games from player listed: ${req.params.id}`);
   res.send(games);
 });
 
