@@ -2,7 +2,6 @@
 /*jshint esversion: 6 */
 
 // Import things
-// const debuggames = require('debug')('app:games');
 const mongoose = require('mongoose');
 
 // ENV things
