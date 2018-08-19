@@ -19,6 +19,18 @@ debuginit('Environment Settings Done.');
 // setting up express
 const app = express(); // create object app from express
 debuginit('Express started.');
+
+// trying to use some middleware req logs
+app.use(function(req, res, next) {
+  console.log(`middleware got req!`);
+  console.log(`req.ip: ${req.ip}`);
+  console.log(`req.method: ${req.method}`);
+  console.log(`req.originalUrl: ${req.originalUrl}`);
+  console.log(`req.path: ${req.path}`);
+  next();
+});
+
+// other middleware stuff
 app.use(express.json()); // configure the object to handle json
 app.use('/api/v1/games', gamesrouter); // say middleware to use for this route the const that was importet before
 app.use('/api/v1/players', playersrouter);
