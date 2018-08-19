@@ -50,6 +50,11 @@ router.get('/', async (req, res) => {
       scoreplayerB: 1,
       date: 1
     });
+
+  if (_.isEmpty(games)) {
+    debuggames(`no ganes in database to list... ${games}`);
+    return res.status(404).send('Currently no Games in Database...');
+  }
   res.send(games);
   debuggames('games listed');
 });
