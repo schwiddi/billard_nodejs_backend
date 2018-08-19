@@ -14,14 +14,10 @@ const router = express.Router(); // create object
 
 // get all players
 router.get('/', async (req, res) => {
-  debugplayers('get all games');
   const games = await Game.find().select({
     playerA: 1,
     playerB: 1
   });
-  debugplayers('all games stored');
-
-  debugplayers('check if empty return from database');
 
   if (_.isEmpty(games)) {
     debugplayers(`no players in database to list... ${games}`);
@@ -32,12 +28,10 @@ router.get('/', async (req, res) => {
 
   let length = games.length;
 
-  debugplayers('push all players to array');
   for (i = 0; i < length; i++) {
     allplayers.push(games[i].playerA);
     allplayers.push(games[i].playerB);
   }
-  debugplayers('all players stored');
 
   let playersdistinct = [];
 
@@ -54,7 +48,14 @@ router.get('/', async (req, res) => {
   res.send(arraytojson);
 });
 
-// get all games from player
+// get all games from player X
+router.get('/:id', async (req, res) => {
+  const games = await Game.find({
+    $or: [{ playerA: req.params.id }, { playerB: req.params.id }]
+  });
+
+  res.send(games);
+});
 
 // Export the Router
 module.exports = router;
