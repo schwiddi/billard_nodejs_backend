@@ -53,6 +53,14 @@ router.get('/:id', async (req, res) => {
   const games = await Game.find({
     $or: [{ playerA: req.params.id }, { playerB: req.params.id }]
   });
+
+  if (_.isEmpty(games)) {
+    mydebug(`no games for given player: ${req.params.id}`);
+    return res
+      .status(404)
+      .send(`Got no games for given player stored yet: ${req.params.id} ....`);
+  }
+
   mydebug(`games from player listed: ${req.params.id}`);
   res.send(games);
 });
