@@ -8,8 +8,6 @@ const mydebug = require('../common/mydebug');
 const Game = require('../db/mongo_connector');
 const _ = require('underscore');
 
-// ENV things
-
 // setting up express
 const router = express.Router(); // create object
 
@@ -33,7 +31,6 @@ function validateGame(game) {
       .max(1)
       .required()
   };
-  mydebug(`validation function was called`);
   return Joi.validate(game, schema);
 }
 
@@ -141,7 +138,7 @@ router.put('/:id', async (req, res) => {
     },
     { new: true }
   );
-  mydebug(`update on game: ${req.params.id}`);
+  mydebug(`game updated: ${req.params.id}`);
 
   const updatedgame = await Game.findById(req.params.id).select({
     playerA: 1,
@@ -181,7 +178,7 @@ router.delete('/:id', async (req, res) => {
 // should not be usable in Prod env
 router.delete('/', async (req, res) => {
   game = await Game.deleteMany();
-  mydebug(`all games have been delted`);
+  mydebug(`!!!!!! all games have been delted !!!!!!!!!!!!!`);
   return res.status(200).send('all games have been deleted..');
 });
 
