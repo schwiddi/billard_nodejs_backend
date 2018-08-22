@@ -71,6 +71,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // // POST new game
+
 // router.post('/', async (req, res) => {
 //   const { error } = validateGame(req.body);
 //   if (error) {
