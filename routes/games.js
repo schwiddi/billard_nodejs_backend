@@ -70,36 +70,35 @@ router.get('/:id', async (req, res) => {
   });
 });
 
-// // POST new game
+// POST new game
+router.post('/', async (req, res) => {
+  const { error } = validateGame(req.body);
+  if (error) {
+    mydebug(`joi input validation was nok`);
+    return res.status(400).send(error.details[0].message);
+  }
 
-// router.post('/', async (req, res) => {
-//   const { error } = validateGame(req.body);
-//   if (error) {
-//     mydebug(`joi input validation was nok`);
-//     return res.status(400).send(error.details[0].message);
-//   }
+  const sp = `CALL AddGame(
+    '${req.body.playerA}',
+    '${req.body.playerB}',
+    '${req.body.scoreplayerA}',
+    '${req.body.scoreplayerB}')`;
 
-//   let newgame = new Game({
-//     playerA: req.body.playerA,
-//     playerB: req.body.playerB,
-//     scoreplayerA: req.body.scoreplayerA,
-//     scoreplayerB: req.body.scoreplayerB
-//   });
+  db.query(sp, true, (error, results, fields) => {
+    if (error) {
+      mydebug(error.message);
+      return res.status(404).send('something went wrong..');
+    } else if (_.isEmpty(results[0])) {
+      mydebug(`returned inserted game from db was empty`);
+      return res.status(404).send('something went wrong..');
+    } else {
+      mydebug('game added');
+      return res.send(results[0]);
+    }
+  });
+});
 
-//   newgamereturn = await newgame.save();
-
-//   const getnewgame = await Game.findById(newgamereturn.id).select({
-//     playerA: 1,
-//     playerB: 1,
-//     scoreplayerA: 1,
-//     scoreplayerB: 1,
-//     date: 1
-//   });
-//   res.send(getnewgame);
-//   mydebug(`new game: ${getnewgame.id}`);
-// });
-
-// // UPDATE a game by id
+// UPDATE a game by id
 // router.put('/:id', async (req, res) => {
 //   try {
 //     const game = await Game.findById(req.params.id);
