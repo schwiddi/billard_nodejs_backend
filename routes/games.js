@@ -159,9 +159,9 @@ router.delete('/:id', async (req, res) => {
 // DELETE all games
 // should not be usable in Prod env
 router.delete('/', async (req, res) => {
-  game = await Game.deleteMany();
-  mydebug(`!!!!!! all games have been deleted !!!!!!!!!!!!!`);
-  return res.status(200).send('all games have been deleted..');
+  // game = await Game.deleteMany();
+  // mydebug(`!!!!!! all games have been deleted !!!!!!!!!!!!!`);
+  // return res.status(200).send('all games have been deleted..');
 });
 
 // Export the Router
