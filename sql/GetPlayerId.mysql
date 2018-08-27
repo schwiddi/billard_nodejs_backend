@@ -1,0 +1,7 @@
+DELIMITER ;;
+CREATE DEFINER=`pi`@`localhost` PROCEDURE `GetPlayerId`(IN playerA CHAR(20))
+BEGIN
+  SELECT id FROM players
+  WHERE name = playerA;
+END;;
+DELIMITER ;
