@@ -7,6 +7,7 @@ const Joi = require('joi'); // validation
 const mydebug = require('../common/mydebug');
 const db = require('../db/db_connection');
 const _ = require('underscore');
+const tc = require('typechecker');
 
 // setting up express
 const router = express.Router(); // create object
@@ -37,7 +38,6 @@ function validateGame(game) {
 // CRUD things
 // GET
 router.get('/', async (req, res) => {
-  // because of the router u use / here but it is /api/v1..
   const sp = `CALL GetAllGames()`;
 
   db.query(sp, true, (error, results, fields) => {
@@ -100,45 +100,52 @@ router.post('/', async (req, res) => {
 
 // UPDATE a game by id
 router.put('/:id', async (req, res) => {
-  const sp = `CALL GetGameById('${req.params.id}')`;
+  const reqid = req.params.id;
+  isNumber(reqid);
 
-  db.query(sp, true, (error, results, fields) => {
-    if (error) {
-      mydebug(error.message);
-      return res.status(404).send('something went wrong..');
-    } else if (_.isEmpty(results[0])) {
-      mydebug(`trying to update already deleted game`);
-      return res.status(404).send('something went wrong..');
-    }
-  });
+  if (isNaN(req.params.id)) {
+    mydebug(`strange id received: ${req.params.id}`);
+    return res.status(400).send('bad id...');
+  } else {
+    const sp = `CALL GetGameById('${req.params.id}')`;
 
-  const { error } = validateGame(req.body);
-  if (error) {
-    mydebug(`update validation was nok`);
-    return res.status(400).send(error.details[0].message);
+    db.query(sp, true, (error, results, fields) => {
+      if (error) {
+        mydebug(error.message);
+        return res.status(404).send('something went wrong..');
+      } else if (_.isEmpty(results[0])) {
+        mydebug(`trying to update already deleted game`);
+        return res.status(404).send('Game does not exist...');
+      } else {
+        const { error } = validateGame(req.body);
+        if (error) {
+          mydebug(`update validation was nok`);
+          return res.status(400).send(error.details[0].message);
+        } else {
+          const spupdate = `CALL UpdateGame(
+          '${req.params.id}',
+          '${req.body.playerA}',
+          '${req.body.playerB}',
+          '${req.body.scoreplayerA}',
+          '${req.body.scoreplayerB}'
+        )`;
+
+          db.query(spupdate, true, (error, results, fields) => {
+            if (error) {
+              mydebug(error.message);
+              return res.status(404).send('something went wrong..');
+            } else if (_.isEmpty(results[0])) {
+              mydebug(`something strange happened`);
+              return res.status(404).send('something went wrong..');
+            } else {
+              mydebug(`game updated: ${req.params.id}`);
+              return res.send(results[0]);
+            }
+          });
+        }
+      }
+    });
   }
-
-  // game schreiben mit neuen werten
-  const spupdate = `CALL UpdateGame(
-    '${req.params.id}',
-    '${req.body.playerA}',
-    '${req.body.playerB}',
-    '${req.body.scoreplayerA}',
-    '${req.body.scoreplayerB}'
-  )`;
-
-  db.query(spupdate, true, (error, results, fields) => {
-    if (error) {
-      mydebug(error.message);
-      return res.status(404).send('something went wrong..');
-    } else if (_.isEmpty(results[0])) {
-      mydebug(`something strange happened`);
-      return res.status(404).send('something went wrong..');
-    } else {
-      mydebug(`game updated: ${req.params.id}`);
-      return res.send(results[0]);
-    }
-  });
 });
 
 // DELETE a game by id
@@ -159,9 +166,17 @@ router.delete('/:id', async (req, res) => {
 // DELETE all games
 // should not be usable in Prod env
 router.delete('/', async (req, res) => {
-  // game = await Game.deleteMany();
-  // mydebug(`!!!!!! all games have been deleted !!!!!!!!!!!!!`);
-  // return res.status(200).send('all games have been deleted..');
+  const sp = `CALL DeleteAllGames()`;
+
+  db.query(sp, true, (error, results, fields) => {
+    if (error) {
+      mydebug(error.message);
+      return res.status(404).send(`something went wrong..`);
+    } else {
+      mydebug(`game deleted wit id: ${req.params.id}`);
+      return res.status(200).send(`all games deleted!`);
+    }
+  });
 });
 
 // Export the Router
