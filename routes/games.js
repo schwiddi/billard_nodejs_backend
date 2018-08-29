@@ -101,7 +101,11 @@ router.post('/', async (req, res) => {
 // UPDATE a game by id
 router.put('/:id', async (req, res) => {
   const reqid = req.params.id;
-  isNumber(reqid);
+  if (isNumber(reqid)) {
+    console.log('is number');
+  } else {
+    console.log('is not number');
+  }
 
   if (isNaN(req.params.id)) {
     mydebug(`strange id received: ${req.params.id}`);
@@ -109,42 +113,42 @@ router.put('/:id', async (req, res) => {
   } else {
     const sp = `CALL GetGameById('${req.params.id}')`;
 
-    db.query(sp, true, (error, results, fields) => {
-      if (error) {
-        mydebug(error.message);
-        return res.status(404).send('something went wrong..');
-      } else if (_.isEmpty(results[0])) {
-        mydebug(`trying to update already deleted game`);
-        return res.status(404).send('Game does not exist...');
-      } else {
-        const { error } = validateGame(req.body);
-        if (error) {
-          mydebug(`update validation was nok`);
-          return res.status(400).send(error.details[0].message);
-        } else {
-          const spupdate = `CALL UpdateGame(
-          '${req.params.id}',
-          '${req.body.playerA}',
-          '${req.body.playerB}',
-          '${req.body.scoreplayerA}',
-          '${req.body.scoreplayerB}'
-        )`;
+    // db.query(sp, true, (error, results, fields) => {
+    //   if (error) {
+    //     mydebug(error.message);
+    //     return res.status(404).send('something went wrong..');
+    //   } else if (_.isEmpty(results[0])) {
+    //     mydebug(`trying to update already deleted game`);
+    //     return res.status(404).send('Game does not exist...');
+    //   } else {
+    //     // const { error } = validateGame(req.body);
+    //     // if (error) {
+    //     //   mydebug(`update validation was nok`);
+    //     //   return res.status(400).send(error.details[0].message);
+    //     // } else {
+    //     //   const spupdate = `CALL UpdateGame(
+    //     //   '${req.params.id}',
+    //     //   '${req.body.playerA}',
+    //     //   '${req.body.playerB}',
+    //     //   '${req.body.scoreplayerA}',
+    //     //   '${req.body.scoreplayerB}'
+    //     // )`;
 
-          db.query(spupdate, true, (error, results, fields) => {
-            if (error) {
-              mydebug(error.message);
-              return res.status(404).send('something went wrong..');
-            } else if (_.isEmpty(results[0])) {
-              mydebug(`something strange happened`);
-              return res.status(404).send('something went wrong..');
-            } else {
-              mydebug(`game updated: ${req.params.id}`);
-              return res.send(results[0]);
-            }
-          });
-        }
-      }
-    });
+    //       // db.query(spupdate, true, (error, results, fields) => {
+    //       //   if (error) {
+    //       //     mydebug(error.message);
+    //       //     return res.status(404).send('something went wrong..');
+    //       //   } else if (_.isEmpty(results[0])) {
+    //       //     mydebug(`something strange happened`);
+    //       //     return res.status(404).send('something went wrong..');
+    //       //   } else {
+    //       //     mydebug(`game updated: ${req.params.id}`);
+    //       //     return res.send(results[0]);
+    //       //   }
+    //       // });
+    //     }
+    //   }
+    // });
   }
 });
 
