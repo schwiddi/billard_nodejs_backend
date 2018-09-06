@@ -1,0 +1,6 @@
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteGame`(IN gameId_p INT(11))
+BEGIN
+	DELETE FROM games WHERE id = gameId_p;
+END;;
+DELIMITER ;

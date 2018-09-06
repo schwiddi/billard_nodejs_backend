@@ -1,0 +1,13 @@
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllGames`()
+BEGIN
+SELECT g.`id`, a.`name` AS 'playerA', b.`name` AS 'playerB', g.`scoreplayerA`, g.`scoreplayerB`,g.`isApproved`, g.`ts_insert`, g.`ts_update`
+	FROM games g
+LEFT OUTER JOIN encounters as e
+	ON g.encounter_id = e.id
+LEFT OUTER JOIN players AS a
+	ON e.playerA_id = a.id
+LEFT OUTER JOIN players AS b
+	ON e.playerB_id = b.id;
+END;;
+DELIMITER ;
