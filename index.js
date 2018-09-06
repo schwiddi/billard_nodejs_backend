@@ -3,6 +3,7 @@
 
 // Import things
 const express = require('express'); // middleware
+var cors = require('cors');
 const gamesrouter = require('./routes/games'); // my route to games handler
 const playersrouter = require('./routes/players');
 const rootrouter = require('./routes/root'); // my route to /
@@ -14,10 +15,15 @@ const port = process.env.PORT || fallbackport;
 
 // setting up express
 const app = express(); // create object app from express
+app.use(cors());
 app.use(express.json()); // configure the object to handle json
 app.use('/api/v1/games', gamesrouter); // say middleware to use for this route the const that was importet before
 app.use('/api/v1/players', playersrouter);
 app.use('/', rootrouter); // use the router to route /
+
+app.get('/api/v1/games', function(req, res, next) {
+  res.json({ msg: 'This is CORS-enabled for all origins!' });
+});
 
 // starting server stuff
 app.listen(port);

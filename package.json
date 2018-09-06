@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/schwiddi/billard_nodejs_backend#readme",
   "dependencies": {
+    "cors": "^2.8.4",
     "debug": "^3.1.0",
     "express": "^4.16.3",
     "joi": "^13.6.0",
