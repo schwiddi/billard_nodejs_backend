@@ -2,52 +2,34 @@
 /*jshint esversion: 6 */
 
 // Import things
-const express = require('express'); // middleware
+const db = require('../db/db_connection');
+const express = require('express');
 const mydebug = require('../common/mydebug');
 const _ = require('underscore');
 
-// ENV things
-
 // setting up express
-const router = express.Router(); // create object
+const router = express.Router();
 
 // get all players
-// router.get('/', async (req, res) => {
-//   const games = await Game.find().select({
-//     playerA: 1,
-//     playerB: 1
-//   });
+router.get('/', async (req, res) => {
+  const sp = `CALL GetAllPlayers()`;
 
-//   if (_.isEmpty(games)) {
-//     mydebug(`no players in database to list... ${games}`);
-//     return res.status(404).send('Currently no Players in Database...');
-//   }
+  db.query(sp, true, (error, results, fields) => {
+    if (error) {
+      return mydebug(error.message);
+    } else if (_.isEmpty(results[0])) {
+      mydebug(`no players in database: ${results[0]}`);
+      return res.status(404).send('Currently no Players in Database...');
+    } else {
+      mydebug('players listed');
+      return res.send(results[0]);
+    }
+  });
+});
 
-//   let allplayers = [];
+// get all encounters from player X
 
-//   let length = games.length;
-
-//   for (i = 0; i < length; i++) {
-//     allplayers.push(games[i].playerA);
-//     allplayers.push(games[i].playerB);
-//   }
-
-//   let playersdistinct = [];
-
-//   length = allplayers.length;
-
-//   for (i = 0; i < length; i++) {
-//     let checkplayertmp = playersdistinct.find(c => c === allplayers[i]);
-//     if (!checkplayertmp) {
-//       playersdistinct.push(allplayers[i]);
-//     }
-//   }
-//   mydebug('players listed');
-//   const arraytojson = JSON.stringify(playersdistinct.sort());
-//   res.send(arraytojson);
-// });
-
-// // get all games from player X
+// get all game id's from player X
 // router.get('/:id', async (req, res) => {
 //   const games = await Game.find({
 //     $or: [{ playerA: req.params.id }, { playerB: req.params.id }]
