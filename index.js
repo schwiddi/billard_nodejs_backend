@@ -21,10 +21,6 @@ app.use('/api/v1/games', gamesrouter); // say middleware to use for this route t
 app.use('/api/v1/players', playersrouter);
 app.use('/', rootrouter); // use the router to route /
 
-app.get('/api/v1/games', function(req, res, next) {
-  res.json({ msg: 'This is CORS-enabled for all origins!' });
-});
-
 // starting server stuff
 app.listen(port);
 mydebug(`Listener started on ${port}`);
