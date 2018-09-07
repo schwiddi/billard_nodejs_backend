@@ -3,7 +3,7 @@
 
 // Import things
 const express = require('express'); // middleware
-var cors = require('cors');
+const cors = require('cors');
 const gamesrouter = require('./routes/games'); // my route to games handler
 const playersrouter = require('./routes/players');
 const rootrouter = require('./routes/root'); // my route to /
