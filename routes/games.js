@@ -151,7 +151,6 @@ router.delete('/:id', async (req, res) => {
       mydebug(`delete on deleted game...`);
       return res.status(404).send('Game does not exist...');
     } else {
-      console.log(results);
       const spdelete = `CALL DeleteGame('${req.params.id}')`;
 
       db.query(spdelete, true, (error, results, fields) => {
