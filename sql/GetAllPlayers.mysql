@@ -1,6 +1,0 @@
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllPlayers`()
-BEGIN
-	SELECT name FROM players;
-END;;
-DELIMITER ;

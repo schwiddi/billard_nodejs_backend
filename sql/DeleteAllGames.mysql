@@ -1,6 +1,0 @@
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `DeleteAllGames`()
-BEGIN
-	DELETE FROM games;
-END;;
-DELIMITER ;
