@@ -43,8 +43,8 @@ router.get('/', async (req, res) => {
     if (error) {
       return mydebug(error.message);
     } else if (_.isEmpty(results[0])) {
-      mydebug(`no games in database to list... ${results[0]}`);
-      return res.status(404).send('Currently no Games in Database...');
+      mydebug(`no games in database to list...`);
+      return res.status(200).send('Currently no Games in Database...');
     } else {
       mydebug('games listed');
       return res.send(results[0]);
