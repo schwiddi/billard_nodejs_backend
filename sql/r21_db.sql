@@ -211,8 +211,10 @@ END */;;
 /*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `GetAllPlayers`()
 BEGIN
 	SELECT *
-	FROM players;
+	FROM players
+  ORDER BY name ASC;
 END */;;
+
 
 /*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
 # Dump of PROCEDURE GetGameById
