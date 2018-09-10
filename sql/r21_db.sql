@@ -29,6 +29,8 @@ CREATE TABLE `encounters` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `playerA_id` int(11) NOT NULL,
   `playerB_id` int(11) NOT NULL,
+  `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ts_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -43,10 +45,10 @@ CREATE TABLE `games` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `scoreplayerA` int(2) NOT NULL DEFAULT '99',
   `scoreplayerB` int(2) NOT NULL DEFAULT '99',
-  `ts_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `encounter_id` int(11) NOT NULL,
   `isApproved` tinyint(1) NOT NULL DEFAULT '0',
+  `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ts_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -60,6 +62,8 @@ DROP TABLE IF EXISTS `players`;
 CREATE TABLE `players` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
+  `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ts_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -86,16 +90,16 @@ BEGIN
     	INSERT INTO players (name) VALUES (playerA_p);
     	SET @playerA_id := LAST_INSERT_ID();
     END IF;
-    
+
     IF @playerB_id = '0' THEN
     	INSERT INTO players (name) VALUES (playerB_p);
     	SET @playerB_id := LAST_INSERT_ID();
     END IF;
-	
-	
-	
-	
-	
+
+
+
+
+
 	/* then get encouters id, when not exist add */
 	SET @encounter_id = '0';
 	SELECT id INTO @encounter_id FROM encounters WHERE playerA_id = @playerA_id AND playerB_id = @playerB_id;
@@ -103,8 +107,8 @@ BEGIN
     	INSERT INTO encounters (`playerA_id`, `playerB_id`) VALUES (@playerA_id, @playerB_id);
     	SET @encounter_id := LAST_INSERT_ID();
     END IF;
-    
-    
+
+
 	/* add the game with the corespoding id's */
 	/* check if all is set */
 	IF @encounter_id <> '0' THEN
@@ -257,14 +261,14 @@ BEGIN
     	INSERT INTO players (name) VALUES (playerA_p);
     	SET @playerA_id := LAST_INSERT_ID();
     END IF;
-    
+
     IF @playerB_id = '0' THEN
     	INSERT INTO players (name) VALUES (playerB_p);
     	SET @playerB_id := LAST_INSERT_ID();
     END IF;
-	
-	
-	
+
+
+
 	/* then get encouters id, when not exist add */
 	SET @encounter_id = '0';
 	SELECT id INTO @encounter_id FROM encounters WHERE playerA_id = @playerA_id AND playerB_id = @playerB_id;
@@ -272,14 +276,14 @@ BEGIN
     	INSERT INTO encounters (`playerA_id`, `playerB_id`) VALUES (@playerA_id, @playerB_id);
     	SET @encounter_id := LAST_INSERT_ID();
     END IF;
-    
-    
+
+
 	/* add the game with the corespoding id's */
 	IF @encounter_id <> '0' THEN
 	  UPDATE games g SET g.`encounter_id` = @encounter_id, g.`scoreplayerA` = scoreplayerA_p, g.`scoreplayerB` = scoreplayerB_p WHERE g.`id` = gameId_p;
     END IF;
-    
-    
+
+
     SELECT g.`id`, a.`name` AS 'playerA', b.`name` AS 'playerB', g.`scoreplayerA`, g.`scoreplayerB`,g.`isApproved`,g.`encounter_id`, g.`ts_insert`, g.`ts_update`
 	FROM games g
 	LEFT JOIN encounters as e
