@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
     if (error) {
       return mydebug(error.message);
     } else if (_.isEmpty(results[0])) {
-      mydebug(`no players in database: ${results[0]}`);
+      mydebug(`no players in database...`);
       return res.status(200).send('Currently no Players in Database...');
     } else {
       mydebug('players listed');
