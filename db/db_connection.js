@@ -11,7 +11,6 @@ const db = mysql.createConnection(dbconfig);
 
 setInterval(function() {
   db.query('SELECT 1');
-  mydebug('did req to db to keep session alive');
 }, 600000);
 
 // now Export this Model
