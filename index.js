@@ -6,6 +6,8 @@ const express = require('express'); // middleware
 const cors = require('cors');
 const gamesrouter = require('./routes/games'); // my route to games handler
 const playersrouter = require('./routes/players');
+const playersrankedrouter = require('./routes/playersranked');
+const playersunrankedrouter = require('./routes/playersunranked');
 const rootrouter = require('./routes/root'); // my route to /
 const mydebug = require('./common/mydebug');
 
@@ -19,6 +21,8 @@ app.use(cors());
 app.use(express.json()); // configure the object to handle json
 app.use('/api/v1/games', gamesrouter); // say middleware to use for this route the const that was importet before
 app.use('/api/v1/players', playersrouter);
+app.use('/api/v1/playersranked', playersrankedrouter);
+app.use('/api/v1/playersunranked', playersunrankedrouter);
 app.use('/', rootrouter); // use the router to route /
 
 // starting server stuff
