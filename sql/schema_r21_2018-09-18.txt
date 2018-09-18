@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.23)
 # Datenbank: r21
-# Erstellt am: 2018-09-17 21:52:50 +0000
+# Erstellt am: 2018-09-18 16:27:06 +0000
 # ************************************************************
 
 
@@ -30,7 +30,7 @@ CREATE TABLE `encounters` (
   `playerA_id` int(11) NOT NULL,
   `playerB_id` int(11) NOT NULL,
   `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ts_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -49,7 +49,6 @@ CREATE TABLE `games` (
   `isApproved` tinyint(1) NOT NULL DEFAULT '0',
   `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `ts_lastlogin` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -63,12 +62,12 @@ DROP TABLE IF EXISTS `players`;
 CREATE TABLE `players` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
-  `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `games_total` int(11) NOT NULL DEFAULT '0',
   `games_won` int(11) NOT NULL DEFAULT '0',
   `games_lost` int(11) NOT NULL DEFAULT '0',
   `games_win_lost` float DEFAULT NULL,
+  `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -80,13 +79,13 @@ CREATE TABLE `players` (
 DROP TABLE IF EXISTS `stats`;
 
 CREATE TABLE `stats` (
-  `idstats` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `playerid` int(11) DEFAULT '0',
   `p_tot_g` int(11) DEFAULT '0',
   `p_loss_g` int(11) DEFAULT '0',
   `p_won_g` int(11) DEFAULT '0',
   `p_win_percent` int(11) DEFAULT '0',
-  PRIMARY KEY (`idstats`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -97,12 +96,12 @@ CREATE TABLE `stats` (
 DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(45) NOT NULL,
-  `usermail` varchar(45) NOT NULL,
-  `password` varchar(45) NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL DEFAULT '',
+  `usermail` varchar(255) NOT NULL DEFAULT '',
+  `password` varchar(1024) NOT NULL DEFAULT '',
   `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ts_update` timestamp NULL DEFAULT NULL,
+  `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `ts_lastlogin` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idusers_UNIQUE` (`id`)
