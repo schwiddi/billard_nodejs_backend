@@ -2,13 +2,14 @@
 /*jshint esversion: 6 */
 
 // Import things
-const express = require('express'); // middleware
+const express = require('express');
 const cors = require('cors');
-const gamesrouter = require('./routes/games'); // my route to games handler
+const gamesrouter = require('./routes/games');
 const playersrouter = require('./routes/players');
 const playersrankedrouter = require('./routes/playersranked');
 const playersunrankedrouter = require('./routes/playersunranked');
-const rootrouter = require('./routes/root'); // my route to /
+const rootrouter = require('./routes/root');
+const usersrouter = require('./routes/users');
 const mydebug = require('./common/mydebug');
 
 // ENV things
@@ -17,13 +18,14 @@ const port = process.env.PORT || fallbackport;
 
 // setting up express
 const app = express(); // create object app from express
-app.use(cors());
+app.use(cors()); // musst du mal naschauen was das schon wieder macht... glaube irgendwas mit JSON objects
 app.use(express.json()); // configure the object to handle json
-app.use('/api/v1/games', gamesrouter); // say middleware to use for this route the const that was importet before
+app.use('/api/v1/games', gamesrouter);
 app.use('/api/v1/players', playersrouter);
 app.use('/api/v1/playersranked', playersrankedrouter);
 app.use('/api/v1/playersunranked', playersunrankedrouter);
-app.use('/', rootrouter); // use the router to route /
+app.use('/', rootrouter);
+app.use('/api/v1/users', usersrouter)
 
 // starting server stuff
 app.listen(port);
