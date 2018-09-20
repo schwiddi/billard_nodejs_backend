@@ -29,22 +29,35 @@ router.post('/', async (req, res) => {
       mydebug(`joi user input validation was nok`);
       return res.status(400).send(error.details[0].message);
     }
-  
-    const sp = `CALL AddUser(
-      '${req.body.name}',
-      '${req.body.email}',
-      '${req.body.password}')`;
-  
-    db.query(sp, true, (error, results, fields) => {
+
+    const checkifmailalreadyregistered = `CALL CheckMailAlreadyRegistered('${req.body.email}')`;
+
+    db.query(checkifmailalreadyregistered, true, (error, results, fields) => {
       if (error) {
         mydebug(error.message);
-        return res.status(404).send('something went wrong..');
+        return res.status(500).send('something went wrong on the backend...');
       } else if (_.isEmpty(results[0])) {
-        mydebug(`returned inserted user from db was empty`);
-        return res.status(404).send('something went wrong..');
+        // mail not registered - start registring it
+        const sp = `CALL AddUser(
+          '${req.body.name}',
+          '${req.body.email}',
+          '${req.body.password}')`;
+      
+        db.query(sp, true, (error, results, fields) => {
+          if (error) {
+            mydebug(error.message);
+            return res.status(500).send('something went wrong on the backend...');
+          } else if (_.isEmpty(results[0])) {
+            mydebug(`returned inserted user from db was empty`);
+            return res.status(500).send('something went wrong on the backend...');
+          } else {
+            mydebug('user added');
+            return res.send(results[0]);
+          }
+        });
       } else {
-        mydebug('user added');
-        return res.send(results[0]);
+        mydebug('Mail already registered');
+        return res.status(400).send('Mail already registered...');
       }
     });
   });
