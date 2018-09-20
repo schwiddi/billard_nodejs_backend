@@ -51,13 +51,13 @@ router.post('/', async (req, res) => {
             mydebug(`returned inserted user from db was empty`);
             return res.status(500).send('something went wrong on the backend...');
           } else {
-            mydebug('User added');
+            mydebug('user added');
             return res.send(results[0]);
           }
         });
       } else {
-        mydebug('Mail already registered');
-        return res.status(400).send('Mail already registered...');
+        mydebug('mail already registered');
+        return res.status(400).send('e-mail already registered...');
       }
     });
   });
