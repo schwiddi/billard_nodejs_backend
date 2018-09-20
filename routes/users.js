@@ -7,6 +7,7 @@ const express = require('express');
 const mydebug = require('../common/mydebug');
 const _ = require('underscore');
 const Joi = require('joi');
+const bcrypt = require('bcrypt');
 
 // setting up express
 const router = express.Router();
@@ -30,6 +31,11 @@ router.post('/', async (req, res) => {
       return res.status(400).send(error.details[0].message);
     }
 
+    // generate hashed pw here cause it needs async and i dont know how to do that inside de db if statement
+    const salt = await bcrypt.genSalt(10);
+    const hashedpw = await bcrypt.hash(req.body.password, salt)
+
+
     const checkifmailalreadyregistered = `CALL CheckMailAlreadyRegistered('${req.body.email}')`;
 
     db.query(checkifmailalreadyregistered, true, (error, results, fields) => {
@@ -37,11 +43,10 @@ router.post('/', async (req, res) => {
         mydebug(error.message);
         return res.status(500).send('something went wrong on the backend...');
       } else if (_.isEmpty(results[0])) {
-        // mail not registered - start registring it
         const sp = `CALL AddUser(
           '${req.body.name}',
           '${req.body.email}',
-          '${req.body.password}')`;
+          '${hashedpw}')`;
       
         db.query(sp, true, (error, results, fields) => {
           if (error) {
