@@ -51,7 +51,7 @@ router.post('/', async (req, res) => {
             mydebug(`returned inserted user from db was empty`);
             return res.status(500).send('something went wrong on the backend...');
           } else {
-            mydebug('user added');
+            mydebug('User added');
             return res.send(results[0]);
           }
         });
