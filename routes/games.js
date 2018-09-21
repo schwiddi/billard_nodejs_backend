@@ -34,6 +34,16 @@ function validateGame(game) {
   return Joi.validate(game, schema);
 }
 
+// input validation of get game req
+function validateGetById(params) {
+  const schema = {
+    id: Joi.number()
+      .integer()
+      .required()
+  };
+  return Joi.validate(params, schema);
+}
+
 // CRUD things
 // GET
 router.get('/', async (req, res) => {
@@ -54,6 +64,12 @@ router.get('/', async (req, res) => {
 
 // GET by id
 router.get('/:id', async (req, res) => {
+  const { error } = validateGetById(req.params);
+  if (error) {
+    mydebug(`joi req.id validation was nok`);
+    return res.status(400).send(error.details[0].message);
+  }
+
   const sp = `CALL GetGameById(${req.params.id})`;
   db.query(sp, true, (error, results, fields) => {
     if (error) {
