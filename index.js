@@ -21,7 +21,7 @@ const port = process.env.PORT || fallbackport;
 // setting up express
 const app = express(); // create object app from express
 app.use(function(req, res, next) {
-  log.info(req.connection.remoteAddress);
+  log.info(`got req from ${req.connection.remoteAddress}`);
   next();
 });
 app.use(cors()); // musst du mal naschauen was das schon wieder macht... glaube irgendwas mit JSON objects
