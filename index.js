@@ -36,4 +36,5 @@ app.use('/api/v1/auth', authrouter);
 
 // starting server stuff
 app.listen(port);
-mydebug(`Listener started on ${port}`);
+log.info(`Backend started on ${port}`);
+mydebug(`Backend started on ${port}`);
