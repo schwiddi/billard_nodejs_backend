@@ -1,7 +1,6 @@
 // Hints
 /*jshint esversion: 6 */
 
-// Import things
 var currentdate = new Date();
 var datetime =
   currentdate.getDate() +
@@ -18,5 +17,4 @@ var datetime =
 
 const mydebug = require('debug')(`mydebug@${datetime}`);
 
-// now Export this Model
 module.exports = mydebug;
