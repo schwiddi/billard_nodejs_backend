@@ -1,0 +1,4 @@
+node_modules
+sql
+log/backend.log
+.DS_Store
