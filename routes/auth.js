@@ -68,16 +68,16 @@ router.post('/', async (req, res) => {
   });
 
   // set logged in field in db
-  sql = `CALL SetLastLogin('${req.body.email}')`;
-  db.query(sql, true, (error, results, fields) => {
-    if (error) {
-      mydebug(error.message);
-    }
-  });
+  // sql = `CALL SetLastLogin('${req.body.email}')`;
+  // db.query(sql, true, (error, results, fields) => {
+  //   if (error) {
+  //     mydebug(error.message);
+  //   }
+  // });
 
   // jwt stuff
-  const token = jwt.sign({ email: req.body.email }, 'testkey');
-  res.status(200).send(token);
+  // const token = jwt.sign({ email: req.body.email }, 'testkey');
+  // res.status(200).send(token);
 });
 
 module.exports = router;
