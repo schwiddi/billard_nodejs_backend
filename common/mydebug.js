@@ -15,6 +15,6 @@ var datetime =
   ':' +
   currentdate.getSeconds();
 
-const mydebug = require('debug')(`mydebug@${datetime}`);
+const mydebug = require('debug')(`app@${datetime}`);
 
 module.exports = mydebug;
