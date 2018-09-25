@@ -32,7 +32,7 @@ function validate(req) {
 // async function to check if the user exists
 async function checkIfUserExist(email) {
   let sql = `CALL CheckIfUserExist('${email}')`;
-  db.query(sql, true, (error, results, fields) => {
+  await db.query(sql, true, (error, results, fields) => {
     if (_.isEmpty(results[0])) {
       mydebug(`checkIfUserExist FALSE user not known: ${email}`);
       return false;
@@ -45,8 +45,8 @@ async function checkIfUserExist(email) {
 
 // async function to get the hashed password from the db to compare it after
 async function getPasswordFromDb(email) {
-  sql = `CALL GetHashedPassword('${email}')`;
-  db.query(sql, true, (error, results, fields) => {
+  let sql = `CALL GetHashedPassword('${email}')`;
+  await db.query(sql, true, (error, results, fields) => {
     if (_.isEmpty(results[0])) {
       mydebug(
         `getPasswordFromDb password from user is empty??? this is bad: ${email}`
@@ -63,7 +63,7 @@ async function getPasswordFromDb(email) {
 
 // async function to compare password from user with the one stored in the database
 async function bcryptCompare(reqpw, storedpw) {
-  return bcrypt.compare(reqpw, storedpw);
+  return await bcrypt.compare(reqpw, storedpw);
 }
 
 router.post(
@@ -76,7 +76,7 @@ router.post(
       return res.status(400).send(error.details[0].message);
     }
     const rescheck = await checkIfUserExist(req.body.email);
-    res.send(rescheck);
+    console.log(rescheck);
 
     // const doUserCheck = async email => {
     //   try {
