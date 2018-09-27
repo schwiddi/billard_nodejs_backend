@@ -35,7 +35,7 @@ function validateGame(game) {
 }
 
 // input validation of get game req
-function validateGetById(params) {
+function validateReqId(params) {
   const schema = {
     id: Joi.number()
       .integer()
@@ -64,7 +64,7 @@ router.get('/', async (req, res) => {
 
 // GET by id
 router.get('/:id', async (req, res) => {
-  const { error } = validateGetById(req.params);
+  const { error } = validateReqId(req.params);
   if (error) {
     mydebug(`joi req.id validation was nok`);
     return res.status(400).send(error.details[0].message);
@@ -115,6 +115,12 @@ router.post('/', async (req, res) => {
 
 // UPDATE a game by id
 router.put('/:id', async (req, res) => {
+  const { error } = validateReqId(req.params);
+  if (error) {
+    mydebug(`joi req.id validation was nok`);
+    return res.status(400).send(error.details[0].message);
+  }
+
   const sp = `CALL GetGameById('${req.params.id}')`;
 
   db.query(sp, true, (error, results, fields) => {
@@ -157,6 +163,12 @@ router.put('/:id', async (req, res) => {
 
 // DELETE a game by id
 router.delete('/:id', async (req, res) => {
+  const { error } = validateReqId(req.params);
+  if (error) {
+    mydebug(`joi req.id validation was nok`);
+    return res.status(400).send(error.details[0].message);
+  }
+
   const sp = `CALL GetGameById('${req.params.id}')`;
 
   db.query(sp, true, (error, results, fields) => {
@@ -192,7 +204,7 @@ router.delete('/', async (req, res) => {
       mydebug(error.message);
       return res.status(404).send(`something went wrong..`);
     } else {
-      mydebug(`game deleted wit id: ${req.params.id}`);
+      mydebug(`all games have been deleted!!!`);
       return res.status(200).send(`all games deleted!`);
     }
   });
