@@ -28,7 +28,7 @@ function validate(req) {
 }
 
 async function bcryptCompare(input, database) {
-  return bcrypt.compare(input, database);
+  return bcrypt.compareSync(input, database);
 }
 
 router.post('/', async (req, res) => {
@@ -39,7 +39,7 @@ router.post('/', async (req, res) => {
   }
 
   let sql = `CALL CheckIfUserExist('${req.body.email}')`;
-  db.query(sql, true, (error, results, fields) => {
+  await db.query(sql, true, (error, results, fields) => {
     if (error) {
       mydebug(error.message);
       return res.status(500).send('something went wrong..');
@@ -50,7 +50,7 @@ router.post('/', async (req, res) => {
   });
 
   sql = `CALL GetHashedPassword('${req.body.email}')`;
-  db.query(sql, true, (error, results, fields) => {
+  await db.query(sql, true, (error, results, fields) => {
     if (error) {
       mydebug(error.message);
       return res.status(500).send('something went wrong..');
@@ -63,21 +63,25 @@ router.post('/', async (req, res) => {
       const dbpw = jsonstring[0]['password'];
       const compareResult = bcryptCompare(req.body.password, dbpw);
       console.log(compareResult);
-      if (!compareResult) return res.status(400).send('mail or passwort wrong');
+      if (compareResult == false) {
+        return res.status(400).send('mail or passwort wrong');
+      } else if (compareResult == true) {
+        sql = `CALL SetLastLogin('${req.body.email}')`;
+        db.query(sql, true, (error, results, fields) => {
+          if (error) {
+            mydebug(error.message);
+          }
+        });
+
+        const token = jwt.sign({ email: req.body.email }, 'testkey');
+        res.status(200).send(token);
+      }
     }
   });
 
   // set logged in field in db
-  // sql = `CALL SetLastLogin('${req.body.email}')`;
-  // db.query(sql, true, (error, results, fields) => {
-  //   if (error) {
-  //     mydebug(error.message);
-  //   }
-  // });
 
   // jwt stuff
-  // const token = jwt.sign({ email: req.body.email }, 'testkey');
-  // res.status(200).send(token);
 });
 
 module.exports = router;
