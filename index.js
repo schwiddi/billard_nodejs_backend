@@ -10,7 +10,7 @@ const playersrankedrouter = require('./routes/playersranked');
 const playersunrankedrouter = require('./routes/playersunranked');
 const rootrouter = require('./routes/root');
 const usersrouter = require('./routes/users');
-// const authrouter = require('./routes/auth');
+const authrouter = require('./routes/auth');
 const mydebug = require('./common/mydebug');
 const log = require('./common/logger');
 
@@ -32,9 +32,16 @@ app.use('/api/v1/playersranked', playersrankedrouter);
 app.use('/api/v1/playersunranked', playersunrankedrouter);
 app.use('/', rootrouter);
 app.use('/api/v1/users', usersrouter);
-// app.use('/api/v1/auth', authrouter);
+app.use('/api/v1/auth', authrouter);
 
 // starting server stuff
-app.listen(port);
-log.info(`Backend started on ${port}`);
-mydebug(`Backend started on ${port}`);
+try {
+  app.listen(port, () => {
+    log.info(`Backend started on ${port}`);
+    mydebug(`Backend started on ${port}`);
+  });
+} catch (err) {
+  log.info(err);
+  mydebug(err);
+  process.exit(1);
+}
