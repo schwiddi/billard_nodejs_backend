@@ -9,6 +9,7 @@ const _ = require('underscore');
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const log = require('../common/logger');
 
 // setting up express
 const router = express.Router();
@@ -35,7 +36,8 @@ router.post('/', function(req, res) {
   try {
     let { error: err } = validate(req.body);
     if (err) {
-      mydebug(`joi input validation was nok`);
+      mydebug(`joi input validation was nok: ${err.details[0].message}`);
+      log.info(`joi input validation was nok: ${err.details[0].message}`);
       // sende extra diese meldung und nich joi feedback
       return res.status(400).send('email or password wrong');
     }
@@ -48,9 +50,11 @@ router.post('/', function(req, res) {
     db.query(sp, function(err, results, fields) {
       if (err) {
         mydebug(err.message);
+        log.info(err.message);
         return res.status(500).send('something went wrong on the backend...');
       } else if (results[0].length == 0) {
         mydebug('bad user');
+        log.info('bad user');
         return res.status(400).send('email or password wrong');
       } else if (results[0].length != 0) {
         const sqlstring = JSON.stringify(results[0]);
@@ -58,9 +62,18 @@ router.post('/', function(req, res) {
         const dbpw = jsonstring[0]['password'];
         const compareResult = bcrypt.compareSync(reqpw, dbpw);
         if (compareResult) {
+          sql = `CALL SetLastLogin('${req.body.email}')`;
+          db.query(sql, true, (error, results, fields) => {
+            if (error) {
+              mydebug(error.message);
+              log.info(error.message);
+            }
+          });
           mydebug('succesful auth');
+          log.info(`succesful auth: ${req.body.email}`);
           const token = jwt.sign(
             {
+              id: jsonstring[0]['id'],
               name: jsonstring[0]['name'],
               email: jsonstring[0]['email'],
               isAdmin: jsonstring[0]['isAdmin'],
@@ -71,15 +84,19 @@ router.post('/', function(req, res) {
               expiresIn: 5000
             }
           );
+          mydebug(`token: ${token}`);
+          log.info(`token: ${token}`);
           return res.status(200).send(token);
         } else {
           mydebug('bad password');
+          log.info('bad password');
           return res.status(400).send('email or password wrong');
         }
       }
     });
   } catch (error) {
     mydebug(error.message);
+    log.info(error.message);
     return res.status(500).send('something went wrong on the backend...');
   }
 });

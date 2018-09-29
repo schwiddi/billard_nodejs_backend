@@ -43,4 +43,5 @@ try {
 } catch (err) {
   log.info(err);
   mydebug(err);
+  process.exit(1);
 }
