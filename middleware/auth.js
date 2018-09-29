@@ -1,4 +1,4 @@
-const jwt = require(jsonwebtoken);
+const jwt = require('jsonwebtoken');
 process.env.JWTKEY = 'tmp';
 
 module.exports = function auth(req, res, next) {
