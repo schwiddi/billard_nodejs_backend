@@ -77,7 +77,8 @@ router.post('/', function(req, res) {
               name: jsonstring[0]['name'],
               email: jsonstring[0]['email'],
               isAdmin: jsonstring[0]['isAdmin'],
-              canAddGame: jsonstring[0]['canAddGame']
+              canAddGame: jsonstring[0]['canAddGame'],
+              isApproved: jsonstring[0]['isApproved']
             },
             process.env.JWTKEY,
             {
