@@ -12,9 +12,7 @@ const router = express.Router(); // create object
 // GET
 // root route
 router.get('/', (req, res) => {
-  res.send(
-    '<h1>Hello World..</h1><p><a href="api/v1/games">use api/v1/games ...</a></p>'
-  );
+  res.send('<h1>Hello World..</h1>');
   mydebug('someone landed on the root route..');
 });
 
