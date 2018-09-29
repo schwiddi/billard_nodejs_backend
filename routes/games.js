@@ -7,6 +7,7 @@ const Joi = require('joi'); // validation
 const mydebug = require('../common/mydebug');
 const db = require('../db/db_connection');
 const _ = require('underscore');
+const auth = require('../middleware/auth');
 
 // setting up express
 const router = express.Router(); // create object
@@ -86,7 +87,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST new game
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   const { error } = validateGame(req.body);
   if (error) {
     mydebug(`joi input validation was nok`);
@@ -114,7 +115,7 @@ router.post('/', async (req, res) => {
 });
 
 // UPDATE a game by id
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
   const { error } = validateReqId(req.params);
   if (error) {
     mydebug(`joi req.id validation was nok`);
@@ -162,7 +163,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE a game by id
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
   const { error } = validateReqId(req.params);
   if (error) {
     mydebug(`joi req.id validation was nok`);
@@ -196,7 +197,7 @@ router.delete('/:id', async (req, res) => {
 
 // DELETE all games
 // should not be usable in Prod env
-router.delete('/', async (req, res) => {
+router.delete('/', auth, async (req, res) => {
   const sp = `CALL DeleteAllGames()`;
 
   db.query(sp, true, (error, results, fields) => {
