@@ -88,6 +88,9 @@ router.get('/:id', async (req, res) => {
 
 // POST new game
 router.post('/', auth, async (req, res) => {
+  if (req.user.canAddGame != 1) {
+    return res.status(401).send('you dont have enough privileges buddy...');
+  }
   const { error } = validateGame(req.body);
   if (error) {
     mydebug(`joi input validation was nok`);
@@ -116,6 +119,9 @@ router.post('/', auth, async (req, res) => {
 
 // UPDATE a game by id
 router.put('/:id', auth, async (req, res) => {
+  if (req.user.isAdmin != 1) {
+    return res.status(401).send('you dont have enough privileges buddy...');
+  }
   const { error } = validateReqId(req.params);
   if (error) {
     mydebug(`joi req.id validation was nok`);
@@ -164,6 +170,9 @@ router.put('/:id', auth, async (req, res) => {
 
 // DELETE a game by id
 router.delete('/:id', auth, async (req, res) => {
+  if (req.user.isAdmin != 1) {
+    return res.status(401).send('you dont have enough privileges buddy...');
+  }
   const { error } = validateReqId(req.params);
   if (error) {
     mydebug(`joi req.id validation was nok`);
@@ -198,6 +207,9 @@ router.delete('/:id', auth, async (req, res) => {
 // DELETE all games
 // should not be usable in Prod env
 router.delete('/', auth, async (req, res) => {
+  if (req.user.isAdmin != 1) {
+    return res.status(401).send('you dont have enough privileges buddy...');
+  }
   const sp = `CALL DeleteAllGames()`;
 
   db.query(sp, true, (error, results, fields) => {
