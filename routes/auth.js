@@ -87,7 +87,9 @@ router.post('/', function(req, res) {
           );
           mydebug(`token: ${token}`);
           log.info(`token: ${token}`);
-          return res.status(200).send(token);
+          return res
+            .header('x-auth-token', token)
+            .send('you are logged in now! have fun...');
         } else {
           mydebug('bad password');
           log.info('bad password');
