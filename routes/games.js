@@ -89,7 +89,7 @@ router.get('/:id', async (req, res) => {
 // POST new game
 router.post('/', auth, async (req, res) => {
   if (req.user.canAddGame != 1) {
-    return res.status(401).send('you dont have enough privileges buddy...');
+    return res.status(403).send('you dont have enough privileges buddy...');
   }
   const { error } = validateGame(req.body);
   if (error) {
@@ -120,7 +120,7 @@ router.post('/', auth, async (req, res) => {
 // UPDATE a game by id
 router.put('/:id', auth, async (req, res) => {
   if (req.user.isAdmin != 1) {
-    return res.status(401).send('you dont have enough privileges buddy...');
+    return res.status(403).send('you dont have enough privileges buddy...');
   }
   const { error } = validateReqId(req.params);
   if (error) {
@@ -171,7 +171,7 @@ router.put('/:id', auth, async (req, res) => {
 // DELETE a game by id
 router.delete('/:id', auth, async (req, res) => {
   if (req.user.isAdmin != 1) {
-    return res.status(401).send('you dont have enough privileges buddy...');
+    return res.status(403).send('you dont have enough privileges buddy...');
   }
   const { error } = validateReqId(req.params);
   if (error) {
@@ -208,7 +208,7 @@ router.delete('/:id', auth, async (req, res) => {
 // should not be usable in Prod env
 router.delete('/', auth, async (req, res) => {
   if (req.user.isAdmin != 1) {
-    return res.status(401).send('you dont have enough privileges buddy...');
+    return res.status(403).send('you dont have enough privileges buddy...');
   }
   const sp = `CALL DeleteAllGames()`;
 
