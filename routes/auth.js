@@ -69,7 +69,7 @@ router.post('/', function(req, res) {
               log.info(error.message);
             }
           });
-          mydebug('succesful auth');
+          mydebug(`succesful auth: ${req.body.email}`);
           log.info(`succesful auth: ${req.body.email}`);
           const token = jwt.sign(
             {
@@ -91,7 +91,7 @@ router.post('/', function(req, res) {
             .status(200)
             .header('x-auth-token', token)
             .header('access-control-expose-headers', 'x-auth-token')
-            .send(token);
+            .send('yeah');
         } else {
           mydebug('bad password');
           log.info('bad password');
