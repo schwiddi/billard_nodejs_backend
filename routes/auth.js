@@ -91,7 +91,7 @@ router.post('/', function(req, res) {
             .status(200)
             .header('x-auth-token', token)
             .header('access-control-expose-headers', 'x-auth-token')
-            .send('you are logged in now! have fun...');
+            .send(token);
         } else {
           mydebug('bad password');
           log.info('bad password');
