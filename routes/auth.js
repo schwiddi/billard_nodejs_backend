@@ -88,6 +88,7 @@ router.post('/', function(req, res) {
           mydebug(`token: ${token}`);
           log.info(`token: ${token}`);
           return res
+            .status(200)
             .header('x-auth-token', token)
             .header('access-control-expose-headers', 'x-auth-token')
             .send('you are logged in now! have fun...');
