@@ -61,7 +61,8 @@ router.post('/', function(req, res) {
         const jsonstring = JSON.parse(sqlstring);
         const dbpw = jsonstring[0]['password'];
         const compareResult = bcrypt.compareSync(reqpw, dbpw);
-        if (compareResult) {
+        const isApproved = jsonstring[0]['isApproved'];
+        if (compareResult && isApproved === 1) {
           sql = `CALL SetLastLogin('${req.body.email}')`;
           db.query(sql, true, (error, results, fields) => {
             if (error) {
@@ -93,9 +94,13 @@ router.post('/', function(req, res) {
             .header('access-control-expose-headers', 'x-auth-token')
             .send('yeah');
         } else {
-          mydebug('bad password');
-          log.info('bad password');
-          return res.status(400).send('email or password wrong');
+          mydebug(
+            `login try with bad password or not Approved: ${req.body.email}`
+          );
+          log.info(
+            `login try with bad password or not Approved: ${req.body.email}`
+          );
+          return res.status(400).send('wrong data or not approved');
         }
       }
     });
