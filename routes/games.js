@@ -88,7 +88,7 @@ router.get('/:id', async (req, res) => {
 
 // POST new game
 router.post('/', auth, async (req, res) => {
-  if (req.user.canAddGame != 1) {
+  if (req.user.canAddGame != 1 || req.user.isAdmin != 1) {
     return res.status(403).send('you dont have enough privileges buddy...');
   }
   const { error } = validateGame(req.body);
