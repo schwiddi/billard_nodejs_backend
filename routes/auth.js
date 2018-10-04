@@ -83,7 +83,7 @@ router.post('/', function(req, res) {
             },
             process.env.JWTKEY,
             {
-              expiresIn: '24h'
+              expiresIn: '72h'
             }
           );
           mydebug(`token: ${token}`);
