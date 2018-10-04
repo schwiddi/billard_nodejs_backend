@@ -75,6 +75,7 @@ router.post('/', function(req, res) {
           const token = jwt.sign(
             {
               id: jsonstring[0]['id'],
+              playerid: jsonstring[0]['playerid'],
               name: jsonstring[0]['name'],
               email: jsonstring[0]['email'],
               isAdmin: jsonstring[0]['isAdmin'],
