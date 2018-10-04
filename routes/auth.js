@@ -69,7 +69,7 @@ router.post('/', function(req, res) {
               log.info(error.message);
             }
           });
-          mydebug('succesful auth');
+          mydebug(`succesful auth: ${req.body.email}`);
           log.info(`succesful auth: ${req.body.email}`);
           const token = jwt.sign(
             {
@@ -82,14 +82,16 @@ router.post('/', function(req, res) {
             },
             process.env.JWTKEY,
             {
-              expiresIn: 5000
+              expiresIn: '24h'
             }
           );
           mydebug(`token: ${token}`);
           log.info(`token: ${token}`);
           return res
+            .status(200)
             .header('x-auth-token', token)
-            .send('you are logged in now! have fun...');
+            .header('access-control-expose-headers', 'x-auth-token')
+            .send('yeah');
         } else {
           mydebug('bad password');
           log.info('bad password');
