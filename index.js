@@ -11,8 +11,6 @@ const playersunrankedrouter = require('./routes/playersunranked');
 const rootrouter = require('./routes/root');
 const usersrouter = require('./routes/users');
 const authrouter = require('./routes/auth');
-const claimrouter = require('./routes/claim');
-const setplayeridrouter = require('./routes/setplayerid');
 const mydebug = require('./common/mydebug');
 const log = require('./common/logger');
 
@@ -35,8 +33,6 @@ app.use('/api/v1/playersunranked', playersunrankedrouter);
 app.use('/', rootrouter);
 app.use('/api/v1/users', usersrouter);
 app.use('/api/v1/auth', authrouter);
-app.use('/api/v1/claim', claimrouter);
-app.use('/api/v1/setplayerid', setplayeridrouter);
 
 // starting server stuff
 try {
