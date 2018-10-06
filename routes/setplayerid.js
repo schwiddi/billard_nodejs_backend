@@ -6,7 +6,6 @@ const db = require('../db/db_connection');
 const express = require('express');
 const mydebug = require('../common/mydebug');
 const _ = require('underscore');
-const Joi = require('joi');
 const auth = require('../middleware/auth');
 
 // setting up express
