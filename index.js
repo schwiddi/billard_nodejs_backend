@@ -15,6 +15,7 @@ const claimrouter = require('./routes/claim');
 const setplayeridrouter = require('./routes/setplayerid');
 const approveuserrouter = require('./routes/approveuser');
 const log = require('./common/logger');
+const mydebug = require('./common/mydebug');
 
 // ENV things
 const fallbackport = '3001';
@@ -42,6 +43,7 @@ app.use('/api/v1/approveuser', approveuserrouter);
 // starting server stuff
 try {
   app.listen(port, () => {
+    mydebug(`Backend started on ${port}`);
     log.info(`Backend started on ${port}`);
   });
 } catch (err) {
