@@ -14,7 +14,6 @@ const authrouter = require('./routes/auth');
 const claimrouter = require('./routes/claim');
 const setplayeridrouter = require('./routes/setplayerid');
 const approveuserrouter = require('./routes/approveuser');
-const mydebug = require('./common/mydebug');
 const log = require('./common/logger');
 
 // ENV things
@@ -44,10 +43,8 @@ app.use('/api/v1/approveuser', approveuserrouter);
 try {
   app.listen(port, () => {
     log.info(`Backend started on ${port}`);
-    mydebug(`Backend started on ${port}`);
   });
 } catch (err) {
   log.info(err);
-  mydebug(err);
   process.exit(1);
 }

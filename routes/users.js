@@ -4,7 +4,7 @@
 // Import things
 const db = require('../db/db_connection');
 const express = require('express');
-const mydebug = require('../common/mydebug');
+const log = require('../common/logger');
 const _ = require('underscore');
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
@@ -38,12 +38,12 @@ router.get('/', auth, async (req, res) => {
 
   db.query(sp, true, (error, results, fields) => {
     if (error) {
-      return mydebug(error.message);
+      return log.info(error.message);
     } else if (_.isEmpty(results[0])) {
-      mydebug(`no users in database...`);
+      log.info(`no users in database...`);
       return res.status(200).send('Currently no users in Database...');
     } else {
-      mydebug('users listed');
+      log.info('users listed');
       return res.send(results[0]);
     }
   });
@@ -53,7 +53,7 @@ router.get('/', auth, async (req, res) => {
 router.post('/', async (req, res) => {
   const { error } = validateUser(req.body);
   if (error) {
-    mydebug(`joi user input validation was nok`);
+    log.info(`joi user input validation was nok`);
     return res.status(400).send(error.details[0].message);
   }
 
@@ -67,7 +67,7 @@ router.post('/', async (req, res) => {
 
   db.query(checkifmailalreadyregistered, true, (error, results, fields) => {
     if (error) {
-      mydebug(error.message);
+      log.info(error.message);
       return res.status(500).send('something went wrong on the backend...');
     } else if (_.isEmpty(results[0])) {
       const sp = `CALL AddUser(
@@ -77,18 +77,18 @@ router.post('/', async (req, res) => {
 
       db.query(sp, true, (error, results, fields) => {
         if (error) {
-          mydebug(error.message);
+          log.info(error.message);
           return res.status(500).send('something went wrong on the backend...');
         } else if (_.isEmpty(results[0])) {
-          mydebug(`returned inserted user from db was empty`);
+          log.info(`returned inserted user from db was empty`);
           return res.status(500).send('something went wrong on the backend...');
         } else {
-          mydebug('user added');
+          log.info('user added');
           return res.send(results[0]);
         }
       });
     } else {
-      mydebug('mail already registered');
+      log.info('mail already registered');
       return res.status(400).send('e-mail already registered...');
     }
   });

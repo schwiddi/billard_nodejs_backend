@@ -3,7 +3,7 @@
 
 // Import things
 const express = require('express'); // middleware
-const mydebug = require('../common/mydebug');
+const log = require('../common/logger');
 
 // setting up express
 const router = express.Router(); // create object
@@ -13,7 +13,7 @@ const router = express.Router(); // create object
 // root route
 router.get('/', (req, res) => {
   res.send('<h1>Hello World..</h1>');
-  mydebug('someone landed on the root route..');
+  log.info('someone landed on the root route..');
 });
 
 // Export the Router

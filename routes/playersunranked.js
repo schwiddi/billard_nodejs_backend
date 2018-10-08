@@ -4,7 +4,7 @@
 // Import things
 const db = require('../db/db_connection');
 const express = require('express');
-const mydebug = require('../common/mydebug');
+const log = require('../common/logger');
 const _ = require('underscore');
 
 // setting up express
@@ -16,14 +16,14 @@ router.get('/', async (req, res) => {
 
   db.query(sp, true, (error, results, fields) => {
     if (error) {
-      return mydebug(error.message);
+      return log.info(error.message);
     } else if (_.isEmpty(results[0])) {
-      mydebug(`no unrankedplayers in database...`);
+      log.info(`no unrankedplayers in database...`);
       return res
         .status(200)
         .send('Currently no unranked Players in Database...');
     } else {
-      mydebug('unranked players listed');
+      log.info('unranked players listed');
       return res.send(results[0]);
     }
   });

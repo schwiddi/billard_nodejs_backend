@@ -4,7 +4,7 @@
 // Import things
 const db = require('../db/db_connection');
 const express = require('express');
-const mydebug = require('../common/mydebug');
+const log = require('../common/logger');
 const _ = require('underscore');
 
 // setting up express
@@ -16,12 +16,12 @@ router.get('/', async (req, res) => {
 
   db.query(sp, true, (error, results, fields) => {
     if (error) {
-      return mydebug(error.message);
+      return log.info(error.message);
     } else if (_.isEmpty(results[0])) {
-      mydebug(`no players in database...`);
+      log.info(`no players in database...`);
       return res.status(200).send('Currently no Players in Database...');
     } else {
-      mydebug('players listed');
+      log.info('players listed');
       return res.send(results[0]);
     }
   });
@@ -36,13 +36,13 @@ router.get('/', async (req, res) => {
 //   });
 
 //   if (_.isEmpty(games)) {
-//     mydebug(`no games for given player: ${req.params.id}`);
+//     log.info(`no games for given player: ${req.params.id}`);
 //     return res
 //       .status(404)
 //       .send(`Got no games for given player stored yet: ${req.params.id} ....`);
 //   }
 
-//   mydebug(`games from player listed: ${req.params.id}`);
+//   log.info(`games from player listed: ${req.params.id}`);
 //   res.send(games);
 // });
 

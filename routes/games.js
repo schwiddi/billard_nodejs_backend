@@ -4,7 +4,7 @@
 // Import things
 const express = require('express'); // middleware
 const Joi = require('joi'); // validation
-const mydebug = require('../common/mydebug');
+const log = require('../common/logger');
 const db = require('../db/db_connection');
 const _ = require('underscore');
 const auth = require('../middleware/auth');
@@ -52,12 +52,12 @@ router.get('/', async (req, res) => {
 
   db.query(sp, true, (error, results, fields) => {
     if (error) {
-      return mydebug(error.message);
+      return log.info(error.message);
     } else if (_.isEmpty(results[0])) {
-      mydebug(`no games in database to list...`);
+      log.info(`no games in database to list...`);
       return res.status(200).send('Currently no Games in Database...');
     } else {
-      mydebug('games listed');
+      log.info('games listed');
       return res.send(results[0]);
     }
   });
@@ -67,20 +67,20 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   const { error } = validateReqId(req.params);
   if (error) {
-    mydebug(`joi req.id validation was nok`);
+    log.info(`joi req.id validation was nok`);
     return res.status(400).send(error.details[0].message);
   }
 
   const sp = `CALL GetGameById(${req.params.id})`;
   db.query(sp, true, (error, results, fields) => {
     if (error) {
-      mydebug(error.message);
+      log.info(error.message);
       return res.status(400).send(error.message);
     } else if (_.isEmpty(results[0])) {
-      mydebug(`unknown game was listed`);
+      log.info(`unknown game was listed`);
       return res.status(404).send('Game does not exist...');
     } else {
-      mydebug(`game listed: ${req.params.id}`);
+      log.info(`game listed: ${req.params.id}`);
       return res.send(results[0]);
     }
   });
@@ -89,12 +89,12 @@ router.get('/:id', async (req, res) => {
 // POST new game
 router.post('/', auth, async (req, res) => {
   if (req.user.canAddGame != 1) {
-    mydebug(`${req.user.name} has unsufficient priviledge to add a game`);
+    log.info(`${req.user.name} has unsufficient priviledge to add a game`);
     return res.status(403).send('you dont have enough privileges buddy...');
   }
   const { error } = validateGame(req.body);
   if (error) {
-    mydebug(`joi input validation was nok`);
+    log.info(`joi input validation was nok`);
     return res.status(400).send(error.details[0].message);
   }
 
@@ -106,13 +106,13 @@ router.post('/', auth, async (req, res) => {
 
   db.query(sp, true, (error, results, fields) => {
     if (error) {
-      mydebug(error.message);
+      log.info(error.message);
       return res.status(404).send('something went wrong..');
     } else if (_.isEmpty(results[0])) {
-      mydebug(`returned inserted game from db was empty`);
+      log.info(`returned inserted game from db was empty`);
       return res.status(404).send('something went wrong..');
     } else {
-      mydebug('game added');
+      log.info('game added');
       return res.send(results[0]);
     }
   });
@@ -125,7 +125,7 @@ router.put('/:id', auth, async (req, res) => {
   }
   const { error } = validateReqId(req.params);
   if (error) {
-    mydebug(`joi req.id validation was nok`);
+    log.info(`joi req.id validation was nok`);
     return res.status(400).send(error.details[0].message);
   }
 
@@ -133,15 +133,15 @@ router.put('/:id', auth, async (req, res) => {
 
   db.query(sp, true, (error, results, fields) => {
     if (error) {
-      mydebug(error.message);
+      log.info(error.message);
       return res.status(404).send('something went wrong..');
     } else if (_.isEmpty(results[0])) {
-      mydebug(`trying to update already deleted game`);
+      log.info(`trying to update already deleted game`);
       return res.status(404).send('Game does not exist...');
     } else {
       const { error } = validateGame(req.body);
       if (error) {
-        mydebug(`update validation was nok`);
+        log.info(`update validation was nok`);
         return res.status(400).send(error.details[0].message);
       } else {
         const spupdate = `CALL UpdateGame(
@@ -154,13 +154,13 @@ router.put('/:id', auth, async (req, res) => {
 
         db.query(spupdate, true, (error, results, fields) => {
           if (error) {
-            mydebug(error.message);
+            log.info(error.message);
             return res.status(404).send('something went wrong..');
           } else if (_.isEmpty(results[0])) {
-            mydebug(`something strange happened`);
+            log.info(`something strange happened`);
             return res.status(404).send('something went wrong..');
           } else {
-            mydebug(`game updated: ${req.params.id}`);
+            log.info(`game updated: ${req.params.id}`);
             return res.send(results[0]);
           }
         });
@@ -176,7 +176,7 @@ router.delete('/:id', auth, async (req, res) => {
   }
   const { error } = validateReqId(req.params);
   if (error) {
-    mydebug(`joi req.id validation was nok`);
+    log.info(`joi req.id validation was nok`);
     return res.status(400).send(error.details[0].message);
   }
 
@@ -184,20 +184,20 @@ router.delete('/:id', auth, async (req, res) => {
 
   db.query(sp, true, (error, results, fields) => {
     if (error) {
-      mydebug(error.message);
+      log.info(error.message);
       return res.status(404).send('something went wrong..');
     } else if (_.isEmpty(results[0])) {
-      mydebug(`delete on deleted game...`);
+      log.info(`delete on deleted game...`);
       return res.status(404).send('Game does not exist...');
     } else {
       const spdelete = `CALL DeleteGame('${req.params.id}')`;
 
       db.query(spdelete, true, (error, results, fields) => {
         if (error) {
-          mydebug(error.message);
+          log.info(error.message);
           return res.status(404).send(`something went wrong..`);
         } else {
-          mydebug(`game deleted: ${req.params.id}`);
+          log.info(`game deleted: ${req.params.id}`);
           return res.status(200).send(`game deleted!`);
         }
       });
@@ -215,10 +215,10 @@ router.delete('/', auth, async (req, res) => {
 
   db.query(sp, true, (error, results, fields) => {
     if (error) {
-      mydebug(error.message);
+      log.info(error.message);
       return res.status(404).send(`something went wrong..`);
     } else {
-      mydebug(`all games have been deleted!!!`);
+      log.info(`all games have been deleted!!!`);
       return res.status(200).send(`all games deleted!`);
     }
   });

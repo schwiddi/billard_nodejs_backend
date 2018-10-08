@@ -4,7 +4,7 @@
 // Import things
 const db = require('../db/db_connection');
 const express = require('express');
-const mydebug = require('../common/mydebug');
+const log = require('../common/logger');
 const _ = require('underscore');
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
@@ -36,7 +36,6 @@ router.post('/', function(req, res) {
   try {
     let { error: err } = validate(req.body);
     if (err) {
-      mydebug(`joi input validation was nok: ${err.details[0].message}`);
       log.info(`joi input validation was nok: ${err.details[0].message}`);
       // sende extra diese meldung und nich joi feedback
       return res.status(400).send('email or password wrong');
@@ -49,11 +48,9 @@ router.post('/', function(req, res) {
 
     db.query(sp, function(err, results, fields) {
       if (err) {
-        mydebug(err.message);
         log.info(err.message);
         return res.status(500).send('something went wrong on the backend...');
       } else if (results[0].length == 0) {
-        mydebug('bad user');
         log.info('bad user');
         return res.status(400).send('email or password wrong');
       } else if (results[0].length != 0) {
@@ -66,11 +63,9 @@ router.post('/', function(req, res) {
           sql = `CALL SetLastLogin('${req.body.email}')`;
           db.query(sql, true, (error, results, fields) => {
             if (error) {
-              mydebug(error.message);
               log.info(error.message);
             }
           });
-          mydebug(`succesful auth: ${req.body.email}`);
           log.info(`succesful auth: ${req.body.email}`);
           const token = jwt.sign(
             {
@@ -87,7 +82,6 @@ router.post('/', function(req, res) {
               expiresIn: '72h'
             }
           );
-          mydebug(`token: ${token}`);
           log.info(`token: ${token}`);
           return res
             .status(200)
@@ -95,9 +89,6 @@ router.post('/', function(req, res) {
             .header('access-control-expose-headers', 'x-auth-token')
             .send('yeah');
         } else {
-          mydebug(
-            `login try with bad password or not Approved: ${req.body.email}`
-          );
           log.info(
             `login try with bad password or not Approved: ${req.body.email}`
           );
@@ -106,7 +97,6 @@ router.post('/', function(req, res) {
       }
     });
   } catch (error) {
-    mydebug(error.message);
     log.info(error.message);
     return res.status(500).send('something went wrong on the backend...');
   }
