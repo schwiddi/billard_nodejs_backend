@@ -28,11 +28,11 @@ app.use(function(req, res, next) {
 });
 app.use(cors()); // musst du mal naschauen was das schon wieder macht... glaube irgendwas mit JSON objects
 app.use(express.json()); // configure the object to handle json
+app.use('/', rootrouter);
 app.use('/api/v1/games', gamesrouter);
 app.use('/api/v1/players', playersrouter);
 app.use('/api/v1/playersranked', playersrankedrouter);
 app.use('/api/v1/playersunranked', playersunrankedrouter);
-app.use('/', rootrouter);
 app.use('/api/v1/users', usersrouter);
 app.use('/api/v1/auth', authrouter);
 app.use('/api/v1/claim', claimrouter);
