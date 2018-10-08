@@ -4,7 +4,6 @@
 // Import things
 const db = require('../db/db_connection');
 const express = require('express');
-const log = require('../common/logger');
 const _ = require('underscore');
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
