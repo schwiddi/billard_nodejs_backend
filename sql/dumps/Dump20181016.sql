@@ -181,7 +181,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `idusers_UNIQUE` (`id`),
   UNIQUE KEY `usermail_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -190,7 +190,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'schwiddi','schwiddi@me.com','$2b$10$klROO8em03BCzowbc8pUDu07jNSqnmvICcJ1BUMoT5HmysXb6YzAa','2018-10-16 16:46:14','2018-10-16 22:07:19','2018-10-16 22:07:19',1,1,1,10),(4,'test1','test1@mail.com','$2b$10$lTZ4x5HK6l98zicOigNTZOmQphlQKYZTXseK1YZwYbM9O.GxJptpS','2018-10-16 22:07:08','2018-10-16 22:07:29',NULL,0,1,1,0);
+INSERT INTO `users` VALUES (1,'schwiddi','schwiddi@me.com','$2b$10$klROO8em03BCzowbc8pUDu07jNSqnmvICcJ1BUMoT5HmysXb6YzAa','2018-10-16 16:46:14','2018-10-16 22:46:14','2018-10-16 22:46:14',1,1,1,10),(5,'test1','test1@me.com','$2b$10$.qa.RjJPXArY5.OtuWqxpODvDgqf8l40DsHwNkpiggudpPH9D.A4e','2018-10-16 22:24:41','2018-10-16 22:45:54','2018-10-16 22:45:54',0,0,1,0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -474,8 +474,8 @@ BEGIN
         /*  hol dir nun die ids der players und schreib die mal in den stats table */
         SET @playerida = 0;
         SET @playeridb = 0;
-        SELECT p.id INTO @playerida FROM games g JOIN encounters e ON g.encounter_id = e.id AND g.id = @cursor JOIN players p ON e.playerA_id = p.id;
-        SELECT p.id INTO @playeridb FROM games g JOIN encounters e ON g.encounter_id = e.id AND g.id = @cursor JOIN players p ON e.playerB_id = p.id;
+        SELECT p.id INTO @playerida FROM games g JOIN encounters e ON g.encounter_id = e.id JOIN players p ON e.playerA_id = p.id WHERE g.id = @cursor ;
+        SELECT p.id INTO @playeridb FROM games g JOIN encounters e ON g.encounter_id = e.id JOIN players p ON e.playerB_id = p.id WHERE g.id = @cursor ;
         
         
         IF NOT EXISTS(SELECT * FROM stats WHERE playerid = @playerida) THEN
@@ -943,7 +943,7 @@ BEGIN
     SELECT u.id, u.name, u.email, u.password, u.ts_insert, u.ts_update, u.ts_lastlogin, u.isAdmin, u.canAddGame, u.isApproved, u.claimedPlayerId, p.id AS playerid, p.games_total, p.games_won, p.games_lost, p.games_win_lost
     FROM users u
     LEFT JOIN players p
-    ON u.id = p.user_id  AND u.email = email_p;
+    ON u.id = p.user_id  WHERE u.email = email_p;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1106,4 +1106,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-17  0:15:54
+-- Dump completed on 2018-10-17  0:46:47
