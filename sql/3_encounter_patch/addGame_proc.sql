@@ -19,28 +19,24 @@ BEGIN
 
 
 	/* then get encouters id, when not exist add */
-	SET @encounter_id = '0';
     SET @encounter_id_a = '0';
     SET @encounter_id_b = '0';
     SELECT id INTO @encounter_id_a FROM encounters WHERE playerA_id = @playerA_id AND playerB_id = @playerB_id;
 	SELECT id INTO @encounter_id_b FROM encounters WHERE playerA_id = @playerB_id AND playerB_id = @playerA_id;
 	IF ( @encounter_id_a = '0' AND @encounter_id_b = '0') THEN
     	INSERT INTO encounters (`playerA_id`, `playerB_id`) VALUES (@playerA_id, @playerB_id);
-    	SET @encounter_id := LAST_INSERT_ID();
-	ELSE
-		IF ( @encounter_id_a != '0' ) THEN
-			SET @encounter_id := @encounter_id_a;
-		END IF;
-        IF ( @encounter_id_b != '0' ) THEN
-			SET @encounter_id := @encounter_id_b;
-		END IF;
+    	SET @encounter_id_a := LAST_INSERT_ID();
 	END IF;
 
 
 	/* add the game with the corespoding id's */
 	/* check if all is set */
-	IF @encounter_id <> '0' THEN
-      INSERT INTO games (`scoreplayerA`,`scoreplayerB`,`encounter_id`) VALUES (scoreplayerA_p, scoreplayerB_p, @encounter_id);
+	IF @encounter_id_a <> '0' THEN
+      INSERT INTO games (`scoreplayerA`,`scoreplayerB`,`encounter_id`) VALUES (scoreplayerA_p, scoreplayerB_p, @encounter_id_a);
+      SET @gameid := LAST_INSERT_ID();
+    END IF;
+	IF @encounter_id_b <> '0' THEN
+      INSERT INTO games (`scoreplayerA`,`scoreplayerB`,`encounter_id`) VALUES (scoreplayerB_p, scoreplayerA_p, @encounter_id_b);
       SET @gameid := LAST_INSERT_ID();
     END IF;
     IF @gameid <> '0' THEN
@@ -86,4 +82,6 @@ BEGIN
     
     /* handle player B */
     UPDATE players p SET p.games_win_lost = ( games_won / games_total ) * 100 WHERE p.id = @playerB_id;
+
+	CALL CalcStats;
 END
