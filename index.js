@@ -14,6 +14,7 @@ const authrouter = require('./routes/auth');
 const claimrouter = require('./routes/claim');
 const setplayeridrouter = require('./routes/setplayerid');
 const approveuserrouter = require('./routes/approveuser');
+const switchcanaddgamerouter = require('./routes/switchcanaddgame');
 const log = require('./common/logger');
 const mydebug = require('./common/mydebug');
 
@@ -39,6 +40,7 @@ app.use('/api/v1/auth', authrouter);
 app.use('/api/v1/claim', claimrouter);
 app.use('/api/v1/setplayerid', setplayeridrouter);
 app.use('/api/v1/approveuser', approveuserrouter);
+app.use('/api/v1/switchcanaddgame', switchcanaddgamerouter);
 
 // starting server stuff
 try {

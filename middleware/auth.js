@@ -13,7 +13,11 @@ module.exports = function auth(req, res, next) {
     const jwtpayload = jwt.verify(token, process.env.JWTKEY);
     if (jwtpayload) {
       req.user = jwtpayload;
-      log.info('token succesful verified and loaded payload to req.user');
+      log.info(
+        `token succesful verified from user ${
+          req.user.name
+        } and loaded payload to req.user`
+      );
       next();
     } else {
       log.info('hm....');
