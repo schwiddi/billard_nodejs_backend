@@ -30,6 +30,15 @@ function validateGame(game) {
       .integer()
       .min(0)
       .max(1)
+      .required(),
+    winner: Joi.string()
+      .min(2)
+      .required(),
+    beginner: Joi.string()
+      .min(2)
+      .required(),
+    full: Joi.string()
+      .min(2)
       .required()
   };
   return Joi.validate(game, schema);
