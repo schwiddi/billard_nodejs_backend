@@ -111,7 +111,10 @@ router.post('/', auth, async (req, res) => {
     '${req.body.playerA}',
     '${req.body.playerB}',
     '${req.body.scoreplayerA}',
-    '${req.body.scoreplayerB}')`;
+    '${req.body.scoreplayerB}',
+    '${req.body.winner}',
+    '${req.body.beginner}',
+    '${req.body.full}')`;
 
   db.query(sp, true, (error, results, fields) => {
     if (error) {
