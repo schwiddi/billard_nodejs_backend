@@ -29,7 +29,7 @@ CREATE TABLE `encounters` (
   `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,14 +41,17 @@ DROP TABLE IF EXISTS `games`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `games` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `scoreplayerA` int(2) NOT NULL DEFAULT '99',
-  `scoreplayerB` int(2) NOT NULL DEFAULT '99',
+  `scoreplayerA` tinyint(1) NOT NULL,
+  `scoreplayerB` tinyint(1) NOT NULL,
   `encounter_id` int(11) NOT NULL,
   `isApproved` tinyint(1) NOT NULL DEFAULT '0',
   `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `winner` int(11) DEFAULT NULL,
+  `beginner` int(11) DEFAULT NULL,
+  `full` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=364 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -60,16 +63,16 @@ DROP TABLE IF EXISTS `players`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `players` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '',
+  `name` varchar(255) NOT NULL,
   `games_total` int(11) NOT NULL DEFAULT '0',
   `games_won` int(11) NOT NULL DEFAULT '0',
   `games_lost` int(11) NOT NULL DEFAULT '0',
-  `games_win_lost` float DEFAULT NULL,
+  `games_win_lost` float DEFAULT '0',
   `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `user_id` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -86,7 +89,7 @@ CREATE TABLE `settings` (
   `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`key_id`),
   UNIQUE KEY `key_UNIQUE` (`key`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,11 +105,11 @@ CREATE TABLE `stats` (
   `p_tot_g` int(11) DEFAULT '0',
   `p_loss_g` int(11) DEFAULT '0',
   `p_won_g` int(11) DEFAULT '0',
-  `p_win_percent` float DEFAULT '0',
+  `p_win_percent` float DEFAULT NULL,
+  `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `playerid_UNIQUE` (`playerid`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+  UNIQUE KEY `playerid_UNIQUE` (`playerid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,20 +121,20 @@ DROP TABLE IF EXISTS `users`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `users` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `email` varchar(255) NOT NULL DEFAULT '',
-  `password` varchar(1024) NOT NULL DEFAULT '',
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(1024) NOT NULL,
   `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `ts_lastlogin` timestamp NULL DEFAULT NULL,
+  `ts_lastauth` timestamp NULL DEFAULT NULL,
   `isAdmin` tinyint(4) NOT NULL DEFAULT '0',
   `canAddGame` tinyint(4) NOT NULL DEFAULT '0',
   `isApproved` tinyint(4) NOT NULL DEFAULT '0',
   `claimedPlayerId` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `idusers_UNIQUE` (`id`),
-  UNIQUE KEY `usermail_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+  UNIQUE KEY `usermail_UNIQUE` (`email`),
+	UNIQUE KEY `username_UNIQUE` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -147,7 +150,7 @@ CREATE TABLE `users` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`r21`@`localhost` PROCEDURE `AddGame`(IN playerA_p VARCHAR(50), IN playerB_p VARCHAR(50), IN scoreplayerA_p VARCHAR(1), IN scoreplayerB_p VARCHAR(1))
+CREATE DEFINER=`r21`@`localhost` PROCEDURE `AddGame`(IN playerA_p VARCHAR(50), IN playerB_p VARCHAR(50), IN scoreplayerA_p VARCHAR(1), IN scoreplayerB_p VARCHAR(1), IN winner_p VARCHAR(50), IN beginner_p VARCHAR(50), IN full_p VARCHAR(50))
 BEGIN
 	SET @playerA_id = '0';
 	SET @playerB_id = '0';
@@ -176,16 +179,24 @@ BEGIN
     	INSERT INTO encounters (`playerA_id`, `playerB_id`) VALUES (@playerA_id, @playerB_id);
     	SET @encounter_id_a := LAST_INSERT_ID();
 	END IF;
+    
+	/* new for winner / beginner / full */
+    SET @winner = '0';
+    SET @beginner = '0';
+    SET @full = '0';
+    SELECT id INTO @winner FROM players p WHERE p.`name` = winner_p;
+    SELECT id INTO @beginner FROM players p WHERE p.`name` = beginner_p;
+    SELECT id INTO @full FROM players p WHERE p.`name` = full_p;
 
 
 	/* add the game with the corespoding id's */
 	/* check if all is set */
 	IF @encounter_id_a <> '0' THEN
-      INSERT INTO games (`scoreplayerA`,`scoreplayerB`,`encounter_id`) VALUES (scoreplayerA_p, scoreplayerB_p, @encounter_id_a);
+      INSERT INTO games (`scoreplayerA`,`scoreplayerB`,`encounter_id`,`winner`,`beginner`,`full`) VALUES (scoreplayerA_p, scoreplayerB_p, @encounter_id_a, @winner, @beginner, @full);
       SET @gameid := LAST_INSERT_ID();
     END IF;
 	IF @encounter_id_b <> '0' THEN
-      INSERT INTO games (`scoreplayerA`,`scoreplayerB`,`encounter_id`) VALUES (scoreplayerB_p, scoreplayerA_p, @encounter_id_b);
+      INSERT INTO games (`scoreplayerA`,`scoreplayerB`,`encounter_id`,`winner`,`beginner`,`full`) VALUES (scoreplayerB_p, scoreplayerA_p, @encounter_id_b, @winner, @beginner, @full);
       SET @gameid := LAST_INSERT_ID();
     END IF;
     IF @gameid <> '0' THEN
@@ -880,7 +891,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`r21`@`localhost` PROCEDURE `GetUser`(IN email_p VARCHAR(255))
 BEGIN    
-    SELECT u.id, u.name, u.email, u.password, u.ts_insert, u.ts_update, u.ts_lastlogin, u.isAdmin, u.canAddGame, u.isApproved, u.claimedPlayerId, p.id AS playerid, p.games_total, p.games_won, p.games_lost, p.games_win_lost
+    SELECT u.id, u.name, u.email, u.password, u.ts_insert, u.ts_update, u.ts_lastauth, u.isAdmin, u.canAddGame, u.isApproved, u.claimedPlayerId, p.id AS playerid, p.games_total, p.games_won, p.games_lost, p.games_win_lost
     FROM users u
     LEFT JOIN players p
     ON u.id = p.user_id  WHERE u.email = email_p;
@@ -911,6 +922,7 @@ DELIMITER ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `SetLastLogin` */;
+/*!50003 DROP PROCEDURE IF EXISTS `SetLastAuth` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -920,9 +932,9 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`r21`@`localhost` PROCEDURE `SetLastLogin`(IN email_p VARCHAR(255))
+CREATE DEFINER=`r21`@`localhost` PROCEDURE `SetLastAuth`(IN email_p VARCHAR(255))
 BEGIN
-	UPDATE users u SET u.ts_lastlogin = NOW() WHERE u.email = email_p;
+	UPDATE users u SET u.ts_lastauth = NOW() WHERE u.email = email_p;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1046,4 +1058,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-20 12:12:21
+-- Dump completed on 2018-11-06  0:53:10
