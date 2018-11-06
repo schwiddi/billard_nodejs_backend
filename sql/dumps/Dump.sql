@@ -29,18 +29,8 @@ CREATE TABLE `encounters` (
   `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `encounters`
---
-
-LOCK TABLES `encounters` WRITE;
-/*!40000 ALTER TABLE `encounters` DISABLE KEYS */;
-INSERT INTO `encounters` VALUES (1,1,2,'2018-10-16 19:18:45',NULL),(2,2,3,'2018-10-16 19:19:19',NULL),(3,1,3,'2018-10-16 19:19:54',NULL),(4,4,1,'2018-10-16 19:19:54',NULL),(5,4,2,'2018-10-16 19:20:45',NULL),(6,5,2,'2018-10-16 19:21:29',NULL),(7,6,2,'2018-10-16 19:21:29',NULL),(8,7,3,'2018-10-16 19:21:29',NULL),(9,8,3,'2018-10-16 19:21:29',NULL),(10,5,1,'2018-10-16 19:21:29',NULL),(11,6,1,'2018-10-16 19:21:29',NULL),(12,7,2,'2018-10-16 19:21:30',NULL),(13,8,2,'2018-10-16 19:21:30',NULL),(14,2,2,'2018-10-16 19:21:30',NULL),(15,3,3,'2018-10-16 19:21:30',NULL),(16,4,3,'2018-10-16 19:21:30',NULL),(17,9,2,'2018-10-16 19:21:30',NULL),(18,10,1,'2018-10-16 19:21:30',NULL),(19,10,2,'2018-10-16 19:23:39',NULL),(20,10,3,'2018-10-16 19:23:39',NULL),(21,8,6,'2018-10-16 19:23:39',NULL),(22,3,5,'2018-10-16 19:23:40',NULL),(23,4,6,'2018-10-16 19:23:40',NULL),(24,7,1,'2018-10-16 19:25:09',NULL);
-/*!40000 ALTER TABLE `encounters` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `games`
@@ -51,25 +41,18 @@ DROP TABLE IF EXISTS `games`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `games` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `scoreplayerA` int(2) NOT NULL DEFAULT '99',
-  `scoreplayerB` int(2) NOT NULL DEFAULT '99',
+  `scoreplayerA` tinyint(1) NOT NULL,
+  `scoreplayerB` tinyint(1) NOT NULL,
   `encounter_id` int(11) NOT NULL,
   `isApproved` tinyint(1) NOT NULL DEFAULT '0',
   `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `winner` int(11) DEFAULT NULL,
+  `beginner` int(11) DEFAULT NULL,
+  `full` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=362 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `games`
---
-
-LOCK TABLES `games` WRITE;
-/*!40000 ALTER TABLE `games` DISABLE KEYS */;
-INSERT INTO `games` VALUES (1,1,0,1,0,'2018-10-16 19:18:45',NULL),(2,1,0,1,0,'2018-10-16 19:19:01',NULL),(3,0,1,1,0,'2018-10-16 19:19:01',NULL),(4,1,0,1,0,'2018-10-16 19:19:19',NULL),(5,0,1,1,0,'2018-10-16 19:19:19',NULL),(6,1,0,2,0,'2018-10-16 19:19:19',NULL),(7,1,0,2,0,'2018-10-16 19:19:19',NULL),(8,1,0,1,0,'2018-10-16 19:19:54',NULL),(9,0,1,1,0,'2018-10-16 19:19:54',NULL),(10,1,0,2,0,'2018-10-16 19:19:54',NULL),(11,0,1,3,0,'2018-10-16 19:19:54',NULL),(12,1,0,4,0,'2018-10-16 19:19:54',NULL),(13,1,0,3,0,'2018-10-16 19:19:54',NULL),(14,0,1,2,0,'2018-10-16 19:19:54',NULL),(15,0,1,1,0,'2018-10-16 19:19:54',NULL),(16,1,0,1,0,'2018-10-16 19:20:06',NULL),(17,0,1,1,0,'2018-10-16 19:20:07',NULL),(18,1,0,2,0,'2018-10-16 19:20:07',NULL),(19,0,1,3,0,'2018-10-16 19:20:07',NULL),(20,1,0,4,0,'2018-10-16 19:20:07',NULL),(21,1,0,3,0,'2018-10-16 19:20:07',NULL),(22,0,1,2,0,'2018-10-16 19:20:07',NULL),(23,0,1,1,0,'2018-10-16 19:20:07',NULL),(24,1,0,1,0,'2018-10-16 19:20:07',NULL),(25,0,1,1,0,'2018-10-16 19:20:07',NULL),(26,1,0,2,0,'2018-10-16 19:20:07',NULL),(27,0,1,3,0,'2018-10-16 19:20:07',NULL),(28,1,0,4,0,'2018-10-16 19:20:07',NULL),(29,1,0,3,0,'2018-10-16 19:20:07',NULL),(30,0,1,2,0,'2018-10-16 19:20:07',NULL),(31,0,1,1,0,'2018-10-16 19:20:07',NULL),(32,1,0,1,0,'2018-10-16 19:20:45',NULL),(33,0,1,1,0,'2018-10-16 19:20:45',NULL),(34,1,0,2,0,'2018-10-16 19:20:45',NULL),(35,0,1,3,0,'2018-10-16 19:20:45',NULL),(36,1,0,4,0,'2018-10-16 19:20:45',NULL),(37,1,0,3,0,'2018-10-16 19:20:45',NULL),(38,0,1,2,0,'2018-10-16 19:20:45',NULL),(39,0,1,1,0,'2018-10-16 19:20:45',NULL),(40,1,0,1,0,'2018-10-16 19:20:45',NULL),(41,0,1,1,0,'2018-10-16 19:20:45',NULL),(42,1,0,2,0,'2018-10-16 19:20:45',NULL),(43,0,1,3,0,'2018-10-16 19:20:45',NULL),(44,1,0,4,0,'2018-10-16 19:20:45',NULL),(45,1,0,3,0,'2018-10-16 19:20:45',NULL),(46,0,1,2,0,'2018-10-16 19:20:45',NULL),(47,0,1,1,0,'2018-10-16 19:20:45',NULL),(48,0,1,5,0,'2018-10-16 19:20:45',NULL),(49,0,1,4,0,'2018-10-16 19:20:45',NULL),(50,1,0,1,0,'2018-10-16 19:21:28',NULL),(51,0,1,1,0,'2018-10-16 19:21:28',NULL),(52,1,0,2,0,'2018-10-16 19:21:28',NULL),(53,0,1,3,0,'2018-10-16 19:21:28',NULL),(54,1,0,4,0,'2018-10-16 19:21:28',NULL),(55,1,0,3,0,'2018-10-16 19:21:28',NULL),(56,0,1,2,0,'2018-10-16 19:21:28',NULL),(57,0,1,1,0,'2018-10-16 19:21:29',NULL),(58,1,0,1,0,'2018-10-16 19:21:29',NULL),(59,0,1,1,0,'2018-10-16 19:21:29',NULL),(60,1,0,2,0,'2018-10-16 19:21:29',NULL),(61,0,1,3,0,'2018-10-16 19:21:29',NULL),(62,1,0,4,0,'2018-10-16 19:21:29',NULL),(63,1,0,3,0,'2018-10-16 19:21:29',NULL),(64,0,1,2,0,'2018-10-16 19:21:29',NULL),(65,0,1,1,0,'2018-10-16 19:21:29',NULL),(66,0,1,5,0,'2018-10-16 19:21:29',NULL),(67,0,1,4,0,'2018-10-16 19:21:29',NULL),(68,1,0,6,0,'2018-10-16 19:21:29',NULL),(69,0,1,7,0,'2018-10-16 19:21:29',NULL),(70,1,0,8,0,'2018-10-16 19:21:29',NULL),(71,0,1,9,0,'2018-10-16 19:21:29',NULL),(72,1,0,10,0,'2018-10-16 19:21:29',NULL),(73,0,1,11,0,'2018-10-16 19:21:29',NULL),(74,1,0,12,0,'2018-10-16 19:21:30',NULL),(75,0,1,13,0,'2018-10-16 19:21:30',NULL),(76,1,0,1,0,'2018-10-16 19:21:30',NULL),(77,0,1,14,0,'2018-10-16 19:21:30',NULL),(78,1,0,15,0,'2018-10-16 19:21:30',NULL),(79,0,1,16,0,'2018-10-16 19:21:30',NULL),(80,1,0,10,0,'2018-10-16 19:21:30',NULL),(81,0,1,11,0,'2018-10-16 19:21:30',NULL),(82,1,0,12,0,'2018-10-16 19:21:30',NULL),(83,0,1,13,0,'2018-10-16 19:21:30',NULL),(84,0,1,17,0,'2018-10-16 19:21:30',NULL),(85,0,1,18,0,'2018-10-16 19:21:30',NULL),(86,1,0,1,0,'2018-10-16 19:23:37',NULL),(87,0,1,1,0,'2018-10-16 19:23:37',NULL),(88,1,0,2,0,'2018-10-16 19:23:37',NULL),(89,0,1,3,0,'2018-10-16 19:23:37',NULL),(90,1,0,4,0,'2018-10-16 19:23:37',NULL),(91,1,0,3,0,'2018-10-16 19:23:37',NULL),(92,0,1,2,0,'2018-10-16 19:23:37',NULL),(93,0,1,1,0,'2018-10-16 19:23:37',NULL),(94,1,0,1,0,'2018-10-16 19:23:37',NULL),(95,0,1,1,0,'2018-10-16 19:23:38',NULL),(96,1,0,2,0,'2018-10-16 19:23:38',NULL),(97,0,1,3,0,'2018-10-16 19:23:38',NULL),(98,1,0,4,0,'2018-10-16 19:23:38',NULL),(99,1,0,3,0,'2018-10-16 19:23:38',NULL),(100,0,1,2,0,'2018-10-16 19:23:38',NULL),(101,0,1,1,0,'2018-10-16 19:23:38',NULL),(102,0,1,5,0,'2018-10-16 19:23:38',NULL),(103,0,1,4,0,'2018-10-16 19:23:38',NULL),(104,1,0,6,0,'2018-10-16 19:23:38',NULL),(105,0,1,7,0,'2018-10-16 19:23:38',NULL),(106,1,0,8,0,'2018-10-16 19:23:38',NULL),(107,0,1,9,0,'2018-10-16 19:23:38',NULL),(108,1,0,10,0,'2018-10-16 19:23:38',NULL),(109,0,1,11,0,'2018-10-16 19:23:38',NULL),(110,1,0,12,0,'2018-10-16 19:23:38',NULL),(111,0,1,13,0,'2018-10-16 19:23:38',NULL),(112,1,0,1,0,'2018-10-16 19:23:38',NULL),(113,1,0,1,0,'2018-10-16 19:23:39',NULL),(114,0,1,2,0,'2018-10-16 19:23:39',NULL),(115,0,1,16,0,'2018-10-16 19:23:39',NULL),(116,1,0,10,0,'2018-10-16 19:23:39',NULL),(117,0,1,11,0,'2018-10-16 19:23:39',NULL),(118,1,0,12,0,'2018-10-16 19:23:39',NULL),(119,0,1,13,0,'2018-10-16 19:23:39',NULL),(120,0,1,17,0,'2018-10-16 19:23:39',NULL),(121,0,1,18,0,'2018-10-16 19:23:39',NULL),(122,1,0,19,0,'2018-10-16 19:23:39',NULL),(123,0,1,7,0,'2018-10-16 19:23:39',NULL),(124,1,0,20,0,'2018-10-16 19:23:39',NULL),(125,0,1,9,0,'2018-10-16 19:23:39',NULL),(126,1,0,18,0,'2018-10-16 19:23:39',NULL),(127,0,1,11,0,'2018-10-16 19:23:39',NULL),(128,1,0,7,0,'2018-10-16 19:23:39',NULL),(129,0,1,21,0,'2018-10-16 19:23:39',NULL),(130,1,0,13,0,'2018-10-16 19:23:40',NULL),(131,1,0,13,0,'2018-10-16 19:23:40',NULL),(132,1,0,22,0,'2018-10-16 19:23:40',NULL),(133,0,1,23,0,'2018-10-16 19:23:40',NULL),(134,1,0,10,0,'2018-10-16 19:23:40',NULL),(135,0,1,11,0,'2018-10-16 19:23:40',NULL),(136,1,0,12,0,'2018-10-16 19:23:40',NULL),(137,0,1,13,0,'2018-10-16 19:23:50',NULL),(138,0,1,17,0,'2018-10-16 19:23:50',NULL),(139,0,1,18,0,'2018-10-16 19:23:50',NULL),(140,1,0,1,0,'2018-10-16 19:23:53',NULL),(141,0,1,1,0,'2018-10-16 19:23:53',NULL),(142,1,0,2,0,'2018-10-16 19:23:53',NULL),(143,0,1,3,0,'2018-10-16 19:23:53',NULL),(144,1,0,4,0,'2018-10-16 19:23:53',NULL),(145,1,0,3,0,'2018-10-16 19:23:53',NULL),(146,0,1,2,0,'2018-10-16 19:23:53',NULL),(147,0,1,1,0,'2018-10-16 19:23:53',NULL),(148,1,0,1,0,'2018-10-16 19:23:53',NULL),(149,0,1,1,0,'2018-10-16 19:23:53',NULL),(150,1,0,2,0,'2018-10-16 19:23:53',NULL),(151,0,1,3,0,'2018-10-16 19:23:54',NULL),(152,1,0,4,0,'2018-10-16 19:23:54',NULL),(153,1,0,3,0,'2018-10-16 19:23:54',NULL),(154,0,1,2,0,'2018-10-16 19:23:54',NULL),(155,0,1,1,0,'2018-10-16 19:23:54',NULL),(156,0,1,5,0,'2018-10-16 19:23:54',NULL),(157,0,1,4,0,'2018-10-16 19:23:54',NULL),(158,1,0,6,0,'2018-10-16 19:23:54',NULL),(159,0,1,7,0,'2018-10-16 19:23:54',NULL),(160,1,0,8,0,'2018-10-16 19:23:54',NULL),(161,0,1,9,0,'2018-10-16 19:23:54',NULL),(162,1,0,10,0,'2018-10-16 19:23:54',NULL),(163,0,1,11,0,'2018-10-16 19:23:54',NULL),(164,1,0,12,0,'2018-10-16 19:23:54',NULL),(165,0,1,13,0,'2018-10-16 19:23:54',NULL),(166,1,0,1,0,'2018-10-16 19:23:54',NULL),(167,1,0,1,0,'2018-10-16 19:23:54',NULL),(168,0,1,2,0,'2018-10-16 19:23:54',NULL),(169,0,1,16,0,'2018-10-16 19:23:54',NULL),(170,1,0,10,0,'2018-10-16 19:23:55',NULL),(171,0,1,11,0,'2018-10-16 19:23:55',NULL),(172,1,0,12,0,'2018-10-16 19:23:55',NULL),(173,0,1,13,0,'2018-10-16 19:23:55',NULL),(174,0,1,17,0,'2018-10-16 19:23:55',NULL),(175,0,1,18,0,'2018-10-16 19:23:55',NULL),(176,1,0,19,0,'2018-10-16 19:23:55',NULL),(177,0,1,7,0,'2018-10-16 19:23:55',NULL),(178,1,0,20,0,'2018-10-16 19:23:55',NULL),(179,0,1,9,0,'2018-10-16 19:23:55',NULL),(180,1,0,18,0,'2018-10-16 19:23:55',NULL),(181,0,1,11,0,'2018-10-16 19:23:55',NULL),(182,1,0,7,0,'2018-10-16 19:23:55',NULL),(183,0,1,21,0,'2018-10-16 19:23:55',NULL),(184,1,0,13,0,'2018-10-16 19:23:55',NULL),(185,1,0,13,0,'2018-10-16 19:23:55',NULL),(186,1,0,22,0,'2018-10-16 19:23:55',NULL),(187,0,1,23,0,'2018-10-16 19:23:55',NULL),(188,1,0,10,0,'2018-10-16 19:23:56',NULL),(189,0,1,11,0,'2018-10-16 19:23:56',NULL),(190,1,0,12,0,'2018-10-16 19:23:56',NULL),(191,0,1,13,0,'2018-10-16 19:23:57',NULL),(192,0,1,17,0,'2018-10-16 19:23:58',NULL),(193,0,1,18,0,'2018-10-16 19:23:58',NULL),(194,1,0,1,0,'2018-10-16 19:24:00',NULL),(195,0,1,1,0,'2018-10-16 19:24:00',NULL),(196,1,0,2,0,'2018-10-16 19:24:00',NULL),(197,0,1,3,0,'2018-10-16 19:24:00',NULL),(198,1,0,4,0,'2018-10-16 19:24:00',NULL),(199,1,0,3,0,'2018-10-16 19:24:01',NULL),(200,0,1,2,0,'2018-10-16 19:24:01',NULL),(201,0,1,1,0,'2018-10-16 19:24:01',NULL),(202,1,0,1,0,'2018-10-16 19:24:01',NULL),(203,0,1,1,0,'2018-10-16 19:24:01',NULL),(204,1,0,2,0,'2018-10-16 19:24:01',NULL),(205,0,1,3,0,'2018-10-16 19:24:01',NULL),(206,1,0,4,0,'2018-10-16 19:24:01',NULL),(207,1,0,3,0,'2018-10-16 19:24:01',NULL),(208,0,1,2,0,'2018-10-16 19:24:01',NULL),(209,0,1,1,0,'2018-10-16 19:24:01',NULL),(210,0,1,5,0,'2018-10-16 19:24:01',NULL),(211,0,1,4,0,'2018-10-16 19:24:01',NULL),(212,1,0,6,0,'2018-10-16 19:24:01',NULL),(213,0,1,7,0,'2018-10-16 19:24:01',NULL),(214,1,0,8,0,'2018-10-16 19:24:01',NULL),(215,0,1,9,0,'2018-10-16 19:24:01',NULL),(216,1,0,10,0,'2018-10-16 19:24:01',NULL),(217,0,1,11,0,'2018-10-16 19:24:02',NULL),(218,1,0,12,0,'2018-10-16 19:24:02',NULL),(219,0,1,13,0,'2018-10-16 19:24:02',NULL),(220,1,0,1,0,'2018-10-16 19:24:02',NULL),(221,1,0,1,0,'2018-10-16 19:24:02',NULL),(222,0,1,2,0,'2018-10-16 19:24:02',NULL),(223,0,1,16,0,'2018-10-16 19:24:02',NULL),(224,1,0,10,0,'2018-10-16 19:24:02',NULL),(225,0,1,11,0,'2018-10-16 19:24:02',NULL),(226,1,0,12,0,'2018-10-16 19:24:02',NULL),(227,0,1,13,0,'2018-10-16 19:24:02',NULL),(228,0,1,17,0,'2018-10-16 19:24:02',NULL),(229,0,1,18,0,'2018-10-16 19:24:02',NULL),(230,1,0,19,0,'2018-10-16 19:24:02',NULL),(231,0,1,7,0,'2018-10-16 19:24:02',NULL),(232,1,0,20,0,'2018-10-16 19:24:02',NULL),(233,0,1,9,0,'2018-10-16 19:24:02',NULL),(234,1,0,18,0,'2018-10-16 19:24:02',NULL),(235,0,1,11,0,'2018-10-16 19:24:02',NULL),(236,1,0,7,0,'2018-10-16 19:24:03',NULL),(237,0,1,21,0,'2018-10-16 19:24:03',NULL),(238,1,0,13,0,'2018-10-16 19:24:03',NULL),(239,1,0,13,0,'2018-10-16 19:24:03',NULL),(240,1,0,22,0,'2018-10-16 19:24:03',NULL),(241,0,1,23,0,'2018-10-16 19:24:03',NULL),(242,1,0,10,0,'2018-10-16 19:24:03',NULL),(243,0,1,11,0,'2018-10-16 19:24:03',NULL),(244,1,0,12,0,'2018-10-16 19:24:03',NULL),(245,0,1,13,0,'2018-10-16 19:24:05',NULL),(246,0,1,17,0,'2018-10-16 19:24:05',NULL),(247,0,1,18,0,'2018-10-16 19:24:05',NULL),(248,1,0,1,0,'2018-10-16 19:24:33',NULL),(249,0,1,1,0,'2018-10-16 19:24:33',NULL),(250,1,0,2,0,'2018-10-16 19:24:34',NULL),(251,0,1,3,0,'2018-10-16 19:24:34',NULL),(252,1,0,4,0,'2018-10-16 19:24:34',NULL),(253,1,0,3,0,'2018-10-16 19:24:34',NULL),(254,0,1,2,0,'2018-10-16 19:24:34',NULL),(255,0,1,1,0,'2018-10-16 19:24:34',NULL),(256,1,0,1,0,'2018-10-16 19:24:34',NULL),(257,0,1,1,0,'2018-10-16 19:24:34',NULL),(258,1,0,2,0,'2018-10-16 19:24:34',NULL),(259,0,1,3,0,'2018-10-16 19:24:34',NULL),(260,1,0,4,0,'2018-10-16 19:24:34',NULL),(261,1,0,3,0,'2018-10-16 19:24:34',NULL),(262,0,1,2,0,'2018-10-16 19:24:34',NULL),(263,0,1,1,0,'2018-10-16 19:24:34',NULL),(264,0,1,5,0,'2018-10-16 19:24:34',NULL),(265,0,1,4,0,'2018-10-16 19:24:34',NULL),(266,1,0,6,0,'2018-10-16 19:24:34',NULL),(267,0,1,7,0,'2018-10-16 19:24:34',NULL),(268,1,0,8,0,'2018-10-16 19:24:35',NULL),(269,0,1,9,0,'2018-10-16 19:24:35',NULL),(270,1,0,10,0,'2018-10-16 19:24:35',NULL),(271,0,1,11,0,'2018-10-16 19:24:35',NULL),(272,1,0,12,0,'2018-10-16 19:24:35',NULL),(273,0,1,13,0,'2018-10-16 19:24:35',NULL),(274,1,0,1,0,'2018-10-16 19:24:35',NULL),(275,1,0,1,0,'2018-10-16 19:24:35',NULL),(276,0,1,2,0,'2018-10-16 19:24:35',NULL),(277,0,1,16,0,'2018-10-16 19:24:35',NULL),(278,1,0,10,0,'2018-10-16 19:24:35',NULL),(279,0,1,11,0,'2018-10-16 19:24:35',NULL),(280,1,0,12,0,'2018-10-16 19:24:35',NULL),(281,0,1,13,0,'2018-10-16 19:24:35',NULL),(282,0,1,17,0,'2018-10-16 19:24:35',NULL),(283,0,1,18,0,'2018-10-16 19:24:35',NULL),(284,1,0,19,0,'2018-10-16 19:24:35',NULL),(285,0,1,7,0,'2018-10-16 19:24:35',NULL),(286,1,0,20,0,'2018-10-16 19:24:36',NULL),(287,0,1,9,0,'2018-10-16 19:24:36',NULL),(288,1,0,18,0,'2018-10-16 19:24:36',NULL),(289,0,1,11,0,'2018-10-16 19:24:36',NULL),(290,1,0,7,0,'2018-10-16 19:24:36',NULL),(291,0,1,21,0,'2018-10-16 19:24:36',NULL),(292,1,0,13,0,'2018-10-16 19:24:36',NULL),(293,1,0,13,0,'2018-10-16 19:24:36',NULL),(294,1,0,22,0,'2018-10-16 19:24:36',NULL),(295,0,1,23,0,'2018-10-16 19:24:36',NULL),(296,1,0,10,0,'2018-10-16 19:24:36',NULL),(297,0,1,11,0,'2018-10-16 19:24:36',NULL),(298,1,0,12,0,'2018-10-16 19:24:36',NULL),(299,0,1,13,0,'2018-10-16 19:24:49',NULL),(300,0,1,17,0,'2018-10-16 19:24:49',NULL),(301,0,1,18,0,'2018-10-16 19:24:49',NULL),(302,1,0,1,0,'2018-10-16 19:24:49',NULL),(303,0,1,1,0,'2018-10-16 19:24:49',NULL),(304,1,0,2,0,'2018-10-16 19:24:49',NULL),(305,0,1,3,0,'2018-10-16 19:24:49',NULL),(306,1,0,4,0,'2018-10-16 19:24:49',NULL),(307,1,0,3,0,'2018-10-16 19:24:49',NULL),(308,0,1,2,0,'2018-10-16 19:24:49',NULL),(309,0,1,1,0,'2018-10-16 19:24:49',NULL),(310,1,0,1,0,'2018-10-16 19:24:50',NULL),(311,0,1,1,0,'2018-10-16 19:24:50',NULL),(312,1,0,2,0,'2018-10-16 19:24:50',NULL),(313,0,1,3,0,'2018-10-16 19:24:50',NULL),(314,1,0,4,0,'2018-10-16 19:24:50',NULL),(315,1,0,3,0,'2018-10-16 19:24:50',NULL),(316,0,1,2,0,'2018-10-16 19:24:50',NULL),(317,0,1,1,0,'2018-10-16 19:24:50',NULL),(318,0,1,5,0,'2018-10-16 19:24:50',NULL),(319,0,1,4,0,'2018-10-16 19:24:50',NULL),(320,1,0,6,0,'2018-10-16 19:24:50',NULL),(321,0,1,7,0,'2018-10-16 19:24:50',NULL),(322,1,0,8,0,'2018-10-16 19:24:50',NULL),(323,0,1,9,0,'2018-10-16 19:24:50',NULL),(324,1,0,10,0,'2018-10-16 19:24:50',NULL),(325,0,1,11,0,'2018-10-16 19:24:50',NULL),(326,1,0,12,0,'2018-10-16 19:24:50',NULL),(327,0,1,13,0,'2018-10-16 19:24:50',NULL),(328,1,0,1,0,'2018-10-16 19:24:50',NULL),(329,1,0,1,0,'2018-10-16 19:24:51',NULL),(330,0,1,2,0,'2018-10-16 19:24:51',NULL),(331,0,1,16,0,'2018-10-16 19:24:51',NULL),(332,1,0,10,0,'2018-10-16 19:24:51',NULL),(333,0,1,11,0,'2018-10-16 19:24:51',NULL),(334,1,0,12,0,'2018-10-16 19:24:51',NULL),(335,0,1,13,0,'2018-10-16 19:24:51',NULL),(336,0,1,17,0,'2018-10-16 19:24:51',NULL),(337,0,1,18,0,'2018-10-16 19:24:51',NULL),(338,1,0,19,0,'2018-10-16 19:24:51',NULL),(339,0,1,7,0,'2018-10-16 19:24:51',NULL),(340,1,0,20,0,'2018-10-16 19:24:51',NULL),(341,0,1,9,0,'2018-10-16 19:24:51',NULL),(342,1,0,18,0,'2018-10-16 19:24:51',NULL),(343,0,1,11,0,'2018-10-16 19:24:51',NULL),(344,1,0,7,0,'2018-10-16 19:24:51',NULL),(345,0,1,21,0,'2018-10-16 19:24:51',NULL),(346,1,0,13,0,'2018-10-16 19:24:51',NULL),(347,1,0,13,0,'2018-10-16 19:24:51',NULL),(348,1,0,22,0,'2018-10-16 19:24:51',NULL),(349,0,1,23,0,'2018-10-16 19:24:52',NULL),(350,1,0,10,0,'2018-10-16 19:24:52',NULL),(351,0,1,11,0,'2018-10-16 19:24:52',NULL),(352,1,0,12,0,'2018-10-16 19:24:52',NULL),(353,0,1,13,0,'2018-10-16 19:24:52',NULL),(354,0,1,17,0,'2018-10-16 19:24:52',NULL),(355,0,1,18,0,'2018-10-16 19:24:52',NULL),(356,0,1,24,0,'2018-10-16 19:25:09',NULL),(357,0,1,12,0,'2018-10-16 19:25:09',NULL),(358,0,1,24,0,'2018-10-16 19:25:10',NULL),(359,0,1,12,0,'2018-10-16 19:25:10',NULL),(360,0,1,24,0,'2018-10-16 19:25:11',NULL),(361,0,1,12,0,'2018-10-16 19:25:11',NULL);
-/*!40000 ALTER TABLE `games` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `players`
@@ -80,27 +63,17 @@ DROP TABLE IF EXISTS `players`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `players` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '',
+  `name` varchar(255) NOT NULL,
   `games_total` int(11) NOT NULL DEFAULT '0',
   `games_won` int(11) NOT NULL DEFAULT '0',
   `games_lost` int(11) NOT NULL DEFAULT '0',
-  `games_win_lost` float DEFAULT NULL,
+  `games_win_lost` float DEFAULT '0',
   `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `user_id` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `players`
---
-
-LOCK TABLES `players` WRITE;
-/*!40000 ALTER TABLE `players` DISABLE KEYS */;
-INSERT INTO `players` VALUES (1,'test1',183,91,92,49.7268,'2018-10-16 19:18:44','2018-10-17 18:03:43',5),(2,'Test2',202,105,97,51.9802,'2018-10-16 19:18:45','2018-10-16 19:25:11',0),(3,'Test3',110,62,48,56.3636,'2018-10-16 19:19:19','2018-10-16 19:24:52',0),(4,'Test4',42,17,25,40.4762,'2018-10-16 19:19:54','2018-10-16 19:24:52',0),(5,'Test5',28,23,5,82.1429,'2018-10-16 19:21:29','2018-10-16 19:24:52',0),(6,'Test6',48,15,33,31.25,'2018-10-16 19:21:29','2018-10-16 19:24:52',0),(7,'Test7',29,23,6,79.3103,'2018-10-16 19:21:29','2018-10-16 19:25:11',0),(8,'Test8',43,10,33,23.2558,'2018-10-16 19:21:29','2018-10-16 19:24:52',0),(9,'Test9',11,0,11,0,'2018-10-16 19:21:30','2018-10-16 19:24:52',0),(10,'schwiddi',26,15,11,57.6923,'2018-10-16 19:21:30','2018-10-17 18:03:38',1);
-/*!40000 ALTER TABLE `players` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `settings`
@@ -116,18 +89,8 @@ CREATE TABLE `settings` (
   `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`key_id`),
   UNIQUE KEY `key_UNIQUE` (`key`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `settings`
---
-
-LOCK TABLES `settings` WRITE;
-/*!40000 ALTER TABLE `settings` DISABLE KEYS */;
-INSERT INTO `settings` VALUES (1,'stats_last_calc_game',361,'2018-10-16 19:25:11');
-/*!40000 ALTER TABLE `settings` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `stats`
@@ -142,22 +105,12 @@ CREATE TABLE `stats` (
   `p_tot_g` int(11) DEFAULT '0',
   `p_loss_g` int(11) DEFAULT '0',
   `p_won_g` int(11) DEFAULT '0',
-  `p_win_percent` float DEFAULT '0',
+  `p_win_percent` float DEFAULT NULL,
+  `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `playerid_UNIQUE` (`playerid`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+  UNIQUE KEY `playerid_UNIQUE` (`playerid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `stats`
---
-
-LOCK TABLES `stats` WRITE;
-/*!40000 ALTER TABLE `stats` DISABLE KEYS */;
-INSERT INTO `stats` VALUES (1,1,183,92,91,49.7268),(2,2,202,97,105,51.9802),(3,3,110,48,62,56.3636),(4,4,42,25,17,40.4762),(5,5,28,5,23,82.1429),(6,6,48,33,15,31.25),(7,7,29,6,23,79.3103),(8,8,43,33,10,23.2558),(9,9,11,11,0,0),(10,10,26,11,15,57.6923);
-/*!40000 ALTER TABLE `stats` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `users`
@@ -168,31 +121,21 @@ DROP TABLE IF EXISTS `users`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `users` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `email` varchar(255) NOT NULL DEFAULT '',
-  `password` varchar(1024) NOT NULL DEFAULT '',
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(1024) NOT NULL,
   `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `ts_lastlogin` timestamp NULL DEFAULT NULL,
+  `ts_lastauth` timestamp NULL DEFAULT NULL,
   `isAdmin` tinyint(4) NOT NULL DEFAULT '0',
   `canAddGame` tinyint(4) NOT NULL DEFAULT '0',
   `isApproved` tinyint(4) NOT NULL DEFAULT '0',
   `claimedPlayerId` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `idusers_UNIQUE` (`id`),
-  UNIQUE KEY `usermail_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+  UNIQUE KEY `usermail_UNIQUE` (`email`),
+  UNIQUE KEY `username_UNIQUE` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `users`
---
-
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'schwiddi','schwiddi@me.com','$2b$10$klROO8em03BCzowbc8pUDu07jNSqnmvICcJ1BUMoT5HmysXb6YzAa','2018-10-16 16:46:14','2018-10-17 18:06:41','2018-10-17 18:06:41',1,1,1,10),(5,'test1','test1@me.com','$2b$10$.qa.RjJPXArY5.OtuWqxpODvDgqf8l40DsHwNkpiggudpPH9D.A4e','2018-10-16 22:24:41','2018-10-17 18:06:33','2018-10-17 18:06:33',0,0,1,1),(6,'test2','test2@me.com','$2b$10$J7ThkP0/5FoL1qv6tr86aerdZ2e9G45L1oRrH64417VOyrYNkjuh2','2018-10-17 18:02:47','2018-10-17 18:04:37','2018-10-17 18:03:18',0,0,1,0);
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Dumping routines for database 'r21'
@@ -203,11 +146,10 @@ UNLOCK TABLES;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`r21`@`localhost` PROCEDURE `AddGame`(IN playerA_p VARCHAR(50), IN playerB_p VARCHAR(50), IN scoreplayerA_p VARCHAR(1), IN scoreplayerB_p VARCHAR(1))
+CREATE DEFINER=`r21`@`localhost` PROCEDURE `AddGame`(IN playerA_p VARCHAR(50), IN playerB_p VARCHAR(50), IN scoreplayerA_p VARCHAR(1), IN scoreplayerB_p VARCHAR(1), IN winner_p VARCHAR(50), IN beginner_p VARCHAR(50), IN full_p VARCHAR(50))
 BEGIN
 	SET @playerA_id = '0';
 	SET @playerB_id = '0';
@@ -236,16 +178,24 @@ BEGIN
     	INSERT INTO encounters (`playerA_id`, `playerB_id`) VALUES (@playerA_id, @playerB_id);
     	SET @encounter_id_a := LAST_INSERT_ID();
 	END IF;
+    
+	/* new for winner / beginner / full */
+    SET @winner = '0';
+    SET @beginner = '0';
+    SET @full = '0';
+    SELECT id INTO @winner FROM players p WHERE p.`name` = winner_p;
+    SELECT id INTO @beginner FROM players p WHERE p.`name` = beginner_p;
+    SELECT id INTO @full FROM players p WHERE p.`name` = full_p;
 
 
 	/* add the game with the corespoding id's */
 	/* check if all is set */
 	IF @encounter_id_a <> '0' THEN
-      INSERT INTO games (`scoreplayerA`,`scoreplayerB`,`encounter_id`) VALUES (scoreplayerA_p, scoreplayerB_p, @encounter_id_a);
+      INSERT INTO games (`scoreplayerA`,`scoreplayerB`,`encounter_id`,`winner`,`beginner`,`full`) VALUES (scoreplayerA_p, scoreplayerB_p, @encounter_id_a, @winner, @beginner, @full);
       SET @gameid := LAST_INSERT_ID();
     END IF;
 	IF @encounter_id_b <> '0' THEN
-      INSERT INTO games (`scoreplayerA`,`scoreplayerB`,`encounter_id`) VALUES (scoreplayerB_p, scoreplayerA_p, @encounter_id_b);
+      INSERT INTO games (`scoreplayerA`,`scoreplayerB`,`encounter_id`,`winner`,`beginner`,`full`) VALUES (scoreplayerB_p, scoreplayerA_p, @encounter_id_b, @winner, @beginner, @full);
       SET @gameid := LAST_INSERT_ID();
     END IF;
     IF @gameid <> '0' THEN
@@ -305,7 +255,6 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -421,7 +370,6 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -448,7 +396,6 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -573,7 +520,6 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -592,7 +538,6 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -683,7 +628,6 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -707,7 +651,6 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -732,7 +675,6 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -759,7 +701,6 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -828,7 +769,6 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -849,7 +789,6 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -895,7 +834,6 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -915,7 +853,6 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -934,13 +871,12 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`r21`@`localhost` PROCEDURE `GetUser`(IN email_p VARCHAR(255))
 BEGIN    
-    SELECT u.id, u.name, u.email, u.password, u.ts_insert, u.ts_update, u.ts_lastlogin, u.isAdmin, u.canAddGame, u.isApproved, u.claimedPlayerId, p.id AS playerid, p.games_total, p.games_won, p.games_lost, p.games_win_lost
+    SELECT u.id, u.name, u.email, u.password, u.ts_insert, u.ts_update, u.ts_lastauth, u.isAdmin, u.canAddGame, u.isApproved, u.claimedPlayerId, p.id AS playerid, p.games_total, p.games_won, p.games_lost, p.games_win_lost
     FROM users u
     LEFT JOIN players p
     ON u.id = p.user_id  WHERE u.email = email_p;
@@ -956,7 +892,6 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -971,18 +906,18 @@ DELIMITER ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `SetLastLogin` */;
+/*!50003 DROP PROCEDURE IF EXISTS `SetLastAuth` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`r21`@`localhost` PROCEDURE `SetLastLogin`(IN email_p VARCHAR(255))
+CREATE DEFINER=`r21`@`localhost` PROCEDURE `SetLastAuth`(IN email_p VARCHAR(255))
 BEGIN
-	UPDATE users u SET u.ts_lastlogin = NOW() WHERE u.email = email_p;
+	UPDATE users u SET u.ts_lastauth = NOW() WHERE u.email = email_p;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -995,7 +930,6 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -1017,7 +951,6 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -1044,7 +977,6 @@ DELIMITER ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
@@ -1106,4 +1038,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-17 20:42:12
+-- Dump completed on 2018-11-06 17:08:12
