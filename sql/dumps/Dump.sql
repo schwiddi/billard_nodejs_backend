@@ -133,7 +133,7 @@ CREATE TABLE `users` (
   `claimedPlayerId` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `usermail_UNIQUE` (`email`),
-	UNIQUE KEY `username_UNIQUE` (`name`)
+  UNIQUE KEY `username_UNIQUE` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1058,4 +1058,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-06  0:53:10
+-- Dump completed on 2018-11-06 17:08:12
