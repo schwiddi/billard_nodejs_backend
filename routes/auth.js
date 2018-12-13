@@ -59,7 +59,7 @@ router.post('/', function(req, res) {
         const compareResult = bcrypt.compareSync(reqpw, dbpw);
         const isApproved = jsonstring[0]['isApproved'];
         if (compareResult && isApproved === 1) {
-          sql = `CALL SetLastLogin('${req.body.email}')`;
+          sql = `CALL SetLastAuth('${req.body.email}')`;
           db.query(sql, true, (error, results, fields) => {
             if (error) {
               log.info(error.message);
