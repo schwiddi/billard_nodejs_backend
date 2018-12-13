@@ -29,7 +29,7 @@ CREATE TABLE `encounters` (
   `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB   DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -51,7 +51,7 @@ CREATE TABLE `games` (
   `beginner` int(11) DEFAULT NULL,
   `full` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB   DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,15 +64,11 @@ DROP TABLE IF EXISTS `players`;
 CREATE TABLE `players` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `games_total` int(11) NOT NULL DEFAULT '0',
-  `games_won` int(11) NOT NULL DEFAULT '0',
-  `games_lost` int(11) NOT NULL DEFAULT '0',
-  `games_win_lost` float DEFAULT '0',
   `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `user_id` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB   DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -89,7 +85,7 @@ CREATE TABLE `settings` (
   `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`key_id`),
   UNIQUE KEY `key_UNIQUE` (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB   DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -109,7 +105,7 @@ CREATE TABLE `stats` (
   `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `playerid_UNIQUE` (`playerid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB   DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,7 +130,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `usermail_UNIQUE` (`email`),
   UNIQUE KEY `username_UNIQUE` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB   DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -165,10 +161,7 @@ BEGIN
     	SET @playerB_id := LAST_INSERT_ID();
     END IF;
 
-
-
-
-
+    
 	/* then get encouters id, when not exist add */
     SET @encounter_id_a = '0';
     SET @encounter_id_b = '0';
@@ -209,38 +202,6 @@ BEGIN
 			ON e.playerB_id = b.id
 		WHERE g.id = @gameid;
     END IF;
-    
-    /* raise games_total for playerA */
-	IF @playerA_id <> '0' THEN
-		UPDATE players p SET p.games_total = p.games_total + 1 WHERE p.id = @playerA_id;
-    END IF;
-
-    /* raise games_total for playerB */
-	IF @playerB_id <> '0' THEN
-		UPDATE players p SET p.games_total = p.games_total + 1 WHERE p.id = @playerB_id;
-    END IF;
-    
-    
-    
-    
-    
-    /* raise games_won and games_lost from both players */
-    /* if scoreplayerA is greater then scoreplayerB
-		then raise games_won from playerA and raise games_lost playerB otherwhise do oposit */
-	IF scoreplayerA_p > scoreplayerB_p THEN
-		UPDATE players p SET p.games_won = p.games_won + 1 WHERE p.id = @playerA_id;
-        UPDATE players p SET p.games_lost = p.games_lost + 1 WHERE p.id = @playerB_id;
-	ELSE
-		UPDATE players p SET p.games_won = p.games_won + 1 WHERE p.id = @playerB_id;
-        UPDATE players p SET p.games_lost = p.games_lost + 1 WHERE p.id = @playerA_id;
-    END IF;
-    
-    /* now calculate ratio and write */
-    /* handle player A */
-    UPDATE players p SET p.games_win_lost = ( games_won / games_total ) * 100 WHERE p.id = @playerA_id;
-    
-    /* handle player B */
-    UPDATE players p SET p.games_win_lost = ( games_won / games_total ) * 100 WHERE p.id = @playerB_id;
 
 	CALL CalcStats;
 END ;;
@@ -305,37 +266,13 @@ BEGIN
 		WHERE g.id = @gameid;
     END IF;
     
-    /* raise games_total for playerA */
-	IF @playerA_id <> '0' THEN
-		UPDATE players p SET p.games_total = p.games_total + 1 WHERE p.id = @playerA_id;
-    END IF;
 
-    /* raise games_total for playerB */
-	IF @playerB_id <> '0' THEN
-		UPDATE players p SET p.games_total = p.games_total + 1 WHERE p.id = @playerB_id;
-    END IF;
     
     
     
     
     
-    /* raise games_won and games_lost from both players */
-    /* if scoreplayerA is greater then scoreplayerB
-		then raise games_won from playerA and raise games_lost playerB otherwhise do oposit */
-	IF scoreplayerA_p > scoreplayerB_p THEN
-		UPDATE players p SET p.games_won = p.games_won + 1 WHERE p.id = @playerA_id;
-        UPDATE players p SET p.games_lost = p.games_lost + 1 WHERE p.id = @playerB_id;
-	ELSE
-		UPDATE players p SET p.games_won = p.games_won + 1 WHERE p.id = @playerB_id;
-        UPDATE players p SET p.games_lost = p.games_lost + 1 WHERE p.id = @playerA_id;
-    END IF;
-    
-    /* now calculate ratio and write */
-    /* handle player A */
-    UPDATE players p SET p.games_win_lost = ( games_won / games_total ) * 100 WHERE p.id = @playerA_id;
-    
-    /* handle player B */
-    UPDATE players p SET p.games_win_lost = ( games_won / games_total ) * 100 WHERE p.id = @playerB_id;
+    CALL CalcStats;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -406,7 +343,7 @@ BEGIN
     SELECT value_int INTO @last_calc_game FROM settings s WHERE s.key LIKE "%stats_last_calc_game%";
     
     /* now find out how many games there actualy are */
-	SET @games_count = 0;
+	  SET @games_count = 0;
     SELECT COUNT(*) INTO @games_count FROM games;
     
     /* initiate cursor */ 
@@ -443,10 +380,10 @@ BEGIN
 		END IF;
         
         
-        /* nun holen wir die scores der beiden playern und raisen wins beim winner und losses beim looser */
-        SELECT scoreplayerA INTO @playerAscore FROM games g WHERE g.id = @cursor;
-        SELECT scoreplayerB INTO @playerBscore FROM games g WHERE g.id = @cursor;
-        IF @playerAscore > @playerBscore THEN
+    /* nun holen wir die scores der beiden playern und raisen wins beim winner und losses beim looser */
+    SELECT scoreplayerA INTO @playerAscore FROM games g WHERE g.id = @cursor;
+    SELECT scoreplayerB INTO @playerBscore FROM games g WHERE g.id = @cursor;
+    IF @playerAscore > @playerBscore THEN
 			UPDATE stats s SET s.p_won_g = s.p_won_g + 1 WHERE s.playerid = @playerida;
 			UPDATE stats s SET s.p_loss_g = s.p_loss_g + 1 WHERE s.playerid = @playeridb;
 		ELSE
@@ -457,14 +394,10 @@ BEGIN
 		/* und dann rechne von beiden playern den % wert neu und schreib diesen */
 		UPDATE stats s SET s.p_win_percent = ( p_won_g / p_tot_g ) * 100 WHERE s.playerid = @playerida;
 		UPDATE stats s SET s.p_win_percent = ( p_won_g / p_tot_g ) * 100 WHERE s.playerid = @playeridb;
-        
-        
-        
-		
-        
-        /* when all good with this record you're processing then update the settings table */
-        UPDATE settings s SET s.value_int = @cursor WHERE s.key LIKE "%stats_last_calc_game%";
-        
+
+    /* when all good with this record you're processing then update the settings table */
+    UPDATE settings s SET s.value_int = @cursor WHERE s.key LIKE "%stats_last_calc_game%";
+    
 	END WHILE;
     
     
@@ -533,95 +466,6 @@ DELIMITER ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `DeleteGame` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`r21`@`localhost` PROCEDURE `DeleteGame`(IN gameId_p INT(11))
-BEGIN
-	/* init some needed vars */
-    SET @id_winner = '0';
-    SET @id_looser = '0';
-    SET @tmp_winnderfinder = '99';
-    
-    /* find the winner */
-    SELECT g.scoreplayerA INTO @tmp_winnerfinder FROM games g WHERE g.id = gameId_p;
-	
-    IF @tmp_winnerfinder = '1' THEN
-    	SELECT a.`id` INTO @id_winner FROM games g
-			LEFT OUTER JOIN encounters as e
-				ON g.encounter_id = e.id
-			LEFT OUTER JOIN players AS a
-				ON e.playerA_id = a.id
-			LEFT OUTER JOIN players AS b
-				ON e.playerB_id = b.id
-			WHERE g.id = gameId_p;
-		SELECT b.`id` INTO @id_looser FROM games g
-			LEFT OUTER JOIN encounters as e
-				ON g.encounter_id = e.id
-			LEFT OUTER JOIN players AS a
-				ON e.playerA_id = a.id
-			LEFT OUTER JOIN players AS b
-				ON e.playerB_id = b.id
-			WHERE g.id = gameId_p;
-	ELSE
-    	SELECT b.`id` INTO @id_winner FROM games g
-			LEFT OUTER JOIN encounters as e
-				ON g.encounter_id = e.id
-			LEFT OUTER JOIN players AS a
-				ON e.playerA_id = a.id
-			LEFT OUTER JOIN players AS b
-				ON e.playerB_id = b.id
-			WHERE g.id = gameId_p;
-		SELECT a.`id` INTO @id_looser FROM games g
-			LEFT OUTER JOIN encounters as e
-				ON g.encounter_id = e.id
-			LEFT OUTER JOIN players AS a
-				ON e.playerA_id = a.id
-			LEFT OUTER JOIN players AS b
-				ON e.playerB_id = b.id
-			WHERE g.id = gameId_p;
-    END IF;    
-
-    
-    IF @id_winner <> '0' THEN
-    	UPDATE players p SET p.games_won = p.games_won - 1 WHERE p.id = @id_winner;
-        UPDATE players p SET p.games_total = p.games_total - 1 WHERE p.id = @id_winner;
-        
-        /* handle 0 games */
-        SELECT p.games_total INTO @total_games_winner FROM players p WHERE p.id = @id_winner;
-        IF @total_games_winner = '0' THEN
-			UPDATE players p SET p.games_win_lost = 0 WHERE p.id = @id_winner;
-		ELSE
-			UPDATE players p SET p.games_win_lost = ( games_won / games_total ) * 100 WHERE p.id = @id_winner;
-		END IF;
-    END IF;
-    
-    IF @id_looser <> '0' THEN
-    	UPDATE players p SET p.games_lost = p.games_lost - 1 WHERE p.id = @id_looser;
-        UPDATE players p SET p.games_total = p.games_total - 1 WHERE p.id = @id_looser;
-        
-        /* handle 0 games */
-        SELECT p.games_total INTO @total_games_looser FROM players p WHERE p.id = @id_looser;
-        IF @total_games_looser = '0' THEN
-			UPDATE players p SET p.games_win_lost = 0 WHERE p.id = @id_looser;
-		ELSE
-			UPDATE players p SET p.games_win_lost = ( games_won / games_total ) * 100 WHERE p.id = @id_looser;
-		END IF;
-    END IF;
-
-    
-	DELETE FROM games WHERE id = gameId_p;
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `GetAllEncounters` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -706,7 +550,12 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`r21`@`localhost` PROCEDURE `GetAllPlayers`()
 BEGIN
-	SELECT * FROM players p ORDER by name ASC;
+	SELECT p.id AS id, p.name AS name, s.p_tot_g AS games_total, s.p_won_g AS games_won,
+    s.p_loss_g AS games_lost, s.p_win_percent AS games_win_lost, p.ts_insert AS ts_insert,
+    p.ts_update AS ts_update, p.user_id AS user_id FROM players AS p
+	INNER JOIN (SELECT * FROM stats) AS s
+	ON p.id=s.playerid
+    ORDER BY p.name ASC;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -717,21 +566,20 @@ DELIMITER ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`r21`@`localhost` PROCEDURE `GetAllRankedPlayers`()
 BEGIN
-	SELECT 
-		*
-	FROM
-		players p
-	WHERE
-		p.games_total >= 20
-	ORDER BY p.games_win_lost DESC;
+  SELECT p.id AS id, p.name AS name, s.p_tot_g AS games_total, s.p_won_g AS games_won,
+    s.p_loss_g AS games_lost, s.p_win_percent AS games_win_lost, p.ts_insert AS ts_insert,
+    p.ts_update AS ts_update, p.user_id AS user_id FROM players AS p
+	INNER JOIN (SELECT * FROM stats) AS s
+	ON p.id=s.playerid
+  WHERE s.p_tot_g >= 20
+    ORDER BY s.p_win_percent DESC;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -742,21 +590,20 @@ DELIMITER ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE DEFINER=`r21`@`localhost` PROCEDURE `GetAllUnrankedPlayers`()
 BEGIN
-	SELECT 
-		*
-	FROM
-		players p
-	WHERE
-		p.games_total < 20
-	ORDER BY p.name ASC;
+  SELECT p.id AS id, p.name AS name, s.p_tot_g AS games_total, s.p_won_g AS games_won,
+    s.p_loss_g AS games_lost, s.p_win_percent AS games_win_lost, p.ts_insert AS ts_insert,
+    p.ts_update AS ts_update, p.user_id AS user_id FROM players AS p
+	INNER JOIN (SELECT * FROM stats) AS s
+	ON p.id=s.playerid
+	WHERE s.p_tot_g < 20
+    ORDER BY p.name ASC;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -905,7 +752,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `SetLastLogin` */;
 /*!50003 DROP PROCEDURE IF EXISTS `SetLastAuth` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1038,4 +884,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-06 17:08:12
+-- Dump completed on 2018-12-13 19:42:12
