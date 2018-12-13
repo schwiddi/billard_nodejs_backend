@@ -64,10 +64,6 @@ DROP TABLE IF EXISTS `players`;
 CREATE TABLE `players` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `games_total` int(11) NOT NULL DEFAULT '0',
-  `games_won` int(11) NOT NULL DEFAULT '0',
-  `games_lost` int(11) NOT NULL DEFAULT '0',
-  `games_win_lost` float DEFAULT '0',
   `ts_insert` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ts_update` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `user_id` int(11) DEFAULT '0',
