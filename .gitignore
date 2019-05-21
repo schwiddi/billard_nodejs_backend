@@ -1,7 +1,7 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
 # dependencies
-/log
+/log/*.log
 
 # dependencies
 /node_modules
